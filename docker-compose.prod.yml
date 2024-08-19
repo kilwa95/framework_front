@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - boilerplate_network
+    env_file:
+      - .env
+    volumes:
+      - /etc/letsencrypt/:/etc/letsencrypt/:ro
+
+networks:
+  boilerplate_network:
+    driver: bridge
+    name: boilerplate_network
