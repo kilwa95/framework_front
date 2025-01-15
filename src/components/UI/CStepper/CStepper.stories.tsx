@@ -7,7 +7,7 @@ import AccessibilityIcon from '@mui/icons-material/Accessibility';
 import { CStepsProps } from '../types';
 
 const meta = {
-  title: 'UI/Feedback/CStepper',
+  title: 'UI/Navigation/CStepper',
   component: CStepper,
   parameters: {
     layout: 'centered',
