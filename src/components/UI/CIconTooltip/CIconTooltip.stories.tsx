@@ -7,7 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Box } from '@mui/material';
 
 const meta = {
-  title: 'UI/Button/CIconTooltip',
+  title: 'UI/Icon/CIconTooltip',
   component: CIconTooltip,
   parameters: {
     layout: 'centered',
