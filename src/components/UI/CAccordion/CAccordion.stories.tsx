@@ -5,7 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const meta: Meta<typeof CAccordion> = {
-  title: 'UI/CAccordion',
+  title: 'UI/Accordion/CAccordion',
   component: CAccordion,
   tags: ['autodocs'],
 };

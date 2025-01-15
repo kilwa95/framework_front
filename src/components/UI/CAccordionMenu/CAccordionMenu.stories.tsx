@@ -14,7 +14,7 @@ const mockUser = {
 };
 
 const meta = {
-  title: 'UI/CAccordionMenu',
+  title: 'UI/Accordion/CAccordionMenu',
   component: CAccordionMenu,
   parameters: {
     layout: 'centered',

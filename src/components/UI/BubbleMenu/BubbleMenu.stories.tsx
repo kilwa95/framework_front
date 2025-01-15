@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { Box } from '@mui/material';
 
 const meta = {
-  title: 'UI/BubbleMenu',
+  title: 'UI/Menu/BubbleMenu',
   component: BubbleMenu,
   parameters: {
     layout: 'centered',

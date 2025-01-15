@@ -17,7 +17,7 @@ const mockUser = {
 };
 
 const meta = {
-  title: 'UI/AppBarMenu',
+  title: 'UI/Menu/AppBarMenu',
   component: AppBarMenu,
   parameters: {
     layout: 'centered',
