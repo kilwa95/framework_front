@@ -47,7 +47,9 @@
     "build": "tsc && vite build",
     "serve": "vite preview",
     "test": "vitest",
-    "test:coverage": "vitest run --coverage --watch=false"
+    "test:coverage": "vitest run --coverage --watch=false",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "eslintConfig": {
     "extends": [
@@ -69,6 +71,13 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@storybook/addon-essentials": "^8.4.7",
+    "@storybook/addon-interactions": "^8.4.7",
+    "@storybook/addon-links": "^8.4.7",
+    "@storybook/blocks": "^8.4.7",
+    "@storybook/react": "^8.4.7",
+    "@storybook/react-vite": "^8.4.7",
+    "@storybook/testing-library": "^0.2.2",
     "@types/lodash": "^4.14.202",
     "@types/redux-persist": "^4.3.1",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
