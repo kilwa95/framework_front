@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { store } from 'src/store/store';
 
 const meta = {
-  title: 'Navigation/AppBarMenu',
+  title: 'UI/AppBarMenu',
   component: AppBarMenu,
   parameters: {
     layout: 'centered',
