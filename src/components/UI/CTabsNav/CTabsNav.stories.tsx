@@ -4,6 +4,7 @@ import { Box } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { fn } from '@storybook/test';
 
 const meta = {
   title: 'UI/Navigation/CTabsNav',
@@ -84,7 +85,7 @@ export const DefaultTabOpened: Story = {
 export const WithOnChange: Story = {
   args: {
     tabInfos: sampleTabs,
-    onChange: () => console.log('Tab changed'),
+    onChange: fn(),
   },
   decorators: Default.decorators,
 };
