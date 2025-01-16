@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import CMap from './CMap';
-import { Marker } from 'react-leaflet';
 
 const meta: Meta<typeof CMap> = {
   title: 'Components/CMap',
@@ -73,6 +72,39 @@ export const WithClusteredMarkers: Story = {
         position: [48.8619, 2.3532],
         title: 'Centre Pompidou',
         description: "Musée national d'art moderne au cœur de Paris.",
+      },
+    ],
+  },
+};
+
+export const WithMixedMarkers: Story = {
+  args: {
+    ...Default.args,
+    zoom: 12,
+    markers: [
+      {
+        position: [48.8566, 2.3522],
+        title: 'Tour Eiffel',
+        description: 'Monument iconique de Paris, construit en 1889.',
+        isMobileStation: false,
+      },
+      {
+        position: [48.8606, 2.3376],
+        title: 'Station Mobile 1',
+        description: 'Station mobile près de l\'Arc de Triomphe',
+        isMobileStation: true,
+      },
+      {
+        position: [48.8656, 2.3412],
+        title: 'Station Mobile 2',
+        description: 'Station mobile à Parc Monceau',
+        isMobileStation: true,
+      },
+      {
+        position: [48.8619, 2.3532],
+        title: 'Centre Pompidou',
+        description: "Musée national d'art moderne au cœur de Paris.",
+        isMobileStation: false,
       },
     ],
   },

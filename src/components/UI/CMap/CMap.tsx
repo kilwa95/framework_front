@@ -4,11 +4,13 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster';
+import L from 'leaflet';
 
 interface MarkerData {
   position: [number, number];
   title: string;
   description: string;
+  isMobileStation?: boolean;
 }
 
 interface CMapProps {
@@ -17,6 +19,22 @@ interface CMapProps {
   markers?: MarkerData[];
   height?: string;
 }
+
+const triangleIcon = L.divIcon({
+  html: '▲',
+  className: 'triangle-marker',
+  iconSize: [20, 20],
+  iconAnchor: [10, 20],
+});
+
+const defaultIcon = L.icon({
+  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+  iconRetinaUrl:
+    'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+});
 
 const CMap: React.FC<CMapProps> = ({
   center,
@@ -128,6 +146,7 @@ const CMap: React.FC<CMapProps> = ({
             <Marker
               key={index}
               position={marker.position}
+              icon={marker.isMobileStation ? triangleIcon : defaultIcon}
               eventHandlers={{
                 click: () => setSelectedMarker(marker),
               }}
