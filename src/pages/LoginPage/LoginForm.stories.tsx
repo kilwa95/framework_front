@@ -17,7 +17,7 @@ import { fn } from '@storybook/test';
 import { within, userEvent } from '@storybook/testing-library';
 
 // Mock version of LoginForm without Redux dependencies
-const MockLoginForm = ({
+const LoginForm = ({
   navigation,
 }: {
   // eslint-disable-next-line no-unused-vars
@@ -110,7 +110,7 @@ const theme = createTheme();
 
 const meta = {
   title: 'Pages/LoginPage/LoginForm',
-  component: MockLoginForm,
+  component: LoginForm,
   parameters: {
     layout: 'centered',
   },
@@ -126,7 +126,7 @@ const meta = {
     ),
   ],
   tags: ['autodocs'],
-} satisfies Meta<typeof MockLoginForm>;
+} satisfies Meta<typeof LoginForm>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
