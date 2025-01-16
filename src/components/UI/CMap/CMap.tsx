@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -10,6 +10,7 @@ interface CMapProps {
 
 const CMap: React.FC<CMapProps> = ({ center, zoom, children }) => {
   const [isSatellite, setIsSatellite] = useState(false);
+  const mapRef = useRef(null);
 
   const mapStyles = {
     satellite: {
@@ -22,6 +23,18 @@ const CMap: React.FC<CMapProps> = ({ center, zoom, children }) => {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     },
+  };
+
+  const handleZoom = (type: 'in' | 'out') => {
+    const map = mapRef.current;
+
+    if (map) {
+      if (type === 'in') {
+        map.zoomIn();
+      } else {
+        map.zoomOut();
+      }
+    }
   };
 
   return (
@@ -43,11 +56,48 @@ const CMap: React.FC<CMapProps> = ({ center, zoom, children }) => {
         >
           {isSatellite ? 'Vue Plan' : 'Vue Satellite'}
         </button>
+
+        <div
+          style={{
+            position: 'absolute',
+            top: '10px',
+            left: '10px',
+            zIndex: 1000,
+          }}
+        >
+          <button
+            onClick={() => handleZoom('in')}
+            style={{
+              padding: '8px',
+              backgroundColor: 'white',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              marginRight: '5px',
+            }}
+          >
+            +
+          </button>
+          <button
+            onClick={() => handleZoom('out')}
+            style={{
+              padding: '8px',
+              backgroundColor: 'white',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              cursor: 'pointer',
+            }}
+          >
+            -
+          </button>
+        </div>
       </div>
       <MapContainer
+        ref={mapRef}
         center={center}
         zoom={zoom}
         style={{ height: '100%', width: '100%' }}
+        zoomControl={false}
       >
         <TileLayer
           attribution={
