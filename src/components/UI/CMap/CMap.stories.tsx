@@ -39,3 +39,20 @@ export const Tall: Story = {
     height: '800px',
   },
 };
+
+export const WithClusteredMarkers: Story = {
+  args: {
+    ...Default.args,
+    zoom: 12,
+    children: (
+      <>
+        <Marker position={[48.8566, 2.3522]} />
+        <Marker position={[48.8606, 2.3376]} />
+        <Marker position={[48.8656, 2.3412]} />
+        <Marker position={[48.8546, 2.3489]} />
+        <Marker position={[48.8589, 2.3469]} />
+        {/* Add more markers close to each other to test clustering */}
+      </>
+    ),
+  },
+};

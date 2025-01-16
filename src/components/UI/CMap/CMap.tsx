@@ -116,7 +116,20 @@ const CMap: React.FC<CMapProps> = ({
           }
           url={isSatellite ? mapStyles.satellite.url : mapStyles.street.url}
         />
-        <MarkerClusterGroup>{children}</MarkerClusterGroup>
+        <MarkerClusterGroup
+          chunkedLoading
+          onClick={(cluster) => {
+            const map = mapRef.current;
+
+            if (map) {
+              const bounds = cluster.layer.getBounds();
+
+              map.fitBounds(bounds);
+            }
+          }}
+        >
+          {children}
+        </MarkerClusterGroup>
       </MapContainer>
     </div>
   );
