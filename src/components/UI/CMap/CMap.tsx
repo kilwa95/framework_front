@@ -1,24 +1,31 @@
 import React, { useState, useRef } from 'react';
-import { MapContainer, TileLayer } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster';
 
+interface MarkerData {
+  position: [number, number];
+  title: string;
+  description: string;
+}
+
 interface CMapProps {
   center: [number, number];
   zoom: number;
-  children?: React.ReactNode;
+  markers?: MarkerData[];
   height?: string;
 }
 
 const CMap: React.FC<CMapProps> = ({
   center,
   zoom,
-  children,
+  markers = [],
   height = '500px',
 }) => {
   const [isSatellite, setIsSatellite] = useState(false);
+  const [selectedMarker, setSelectedMarker] = useState<MarkerData | null>(null);
   const mapRef = useRef(null);
 
   const mapStyles = {
@@ -116,21 +123,50 @@ const CMap: React.FC<CMapProps> = ({
           }
           url={isSatellite ? mapStyles.satellite.url : mapStyles.street.url}
         />
-        <MarkerClusterGroup
-          chunkedLoading
-          onClick={(cluster) => {
-            const map = mapRef.current;
-
-            if (map) {
-              const bounds = cluster.layer.getBounds();
-
-              map.fitBounds(bounds);
-            }
-          }}
-        >
-          {children}
+        <MarkerClusterGroup chunkedLoading>
+          {markers.map((marker, index) => (
+            <Marker
+              key={index}
+              position={marker.position}
+              eventHandlers={{
+                click: () => setSelectedMarker(marker),
+              }}
+            />
+          ))}
         </MarkerClusterGroup>
       </MapContainer>
+
+      {selectedMarker && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            backgroundColor: 'white',
+            padding: '20px',
+            borderRadius: '8px',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+            zIndex: 1000,
+          }}
+        >
+          <h3>{selectedMarker.title}</h3>
+          <p>{selectedMarker.description}</p>
+          <button
+            onClick={() => setSelectedMarker(null)}
+            style={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              border: 'none',
+              background: 'none',
+              cursor: 'pointer',
+            }}
+          >
+            ✕
+          </button>
+        </div>
+      )}
     </div>
   );
 };

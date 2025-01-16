@@ -24,12 +24,19 @@ export const Default: Story = {
 export const WithMarkers: Story = {
   args: {
     ...Default.args,
-    children: (
-      <>
-        <Marker position={[48.8566, 2.3522]} />
-        <Marker position={[48.8606, 2.3376]} />
-      </>
-    ),
+    markers: [
+      {
+        position: [48.8566, 2.3522],
+        title: 'Tour Eiffel',
+        description: 'Monument iconique de Paris, construit en 1889.',
+      },
+      {
+        position: [48.8606, 2.3376],
+        title: 'Arc de Triomphe',
+        description:
+          'Monument historique situé sur la place Charles de Gaulle.',
+      },
+    ],
   },
 };
 
@@ -44,15 +51,29 @@ export const WithClusteredMarkers: Story = {
   args: {
     ...Default.args,
     zoom: 12,
-    children: (
-      <>
-        <Marker position={[48.8566, 2.3522]} />
-        <Marker position={[48.8606, 2.3376]} />
-        <Marker position={[48.8656, 2.3412]} />
-        <Marker position={[48.8546, 2.3489]} />
-        <Marker position={[48.8589, 2.3469]} />
-        {/* Add more markers close to each other to test clustering */}
-      </>
-    ),
+    markers: [
+      {
+        position: [48.8566, 2.3522],
+        title: 'Tour Eiffel',
+        description: 'Monument iconique de Paris, construit en 1889.',
+      },
+      {
+        position: [48.8606, 2.3376],
+        title: 'Arc de Triomphe',
+        description:
+          'Monument historique situé sur la place Charles de Gaulle.',
+      },
+      {
+        position: [48.8656, 2.3412],
+        title: 'Parc Monceau',
+        description: 'Magnifique parc public du 8ème arrondissement.',
+      },
+
+      {
+        position: [48.8619, 2.3532],
+        title: 'Centre Pompidou',
+        description: "Musée national d'art moderne au cœur de Paris.",
+      },
+    ],
   },
 };
