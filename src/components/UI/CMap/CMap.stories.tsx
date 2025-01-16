@@ -91,7 +91,7 @@ export const WithMixedMarkers: Story = {
       {
         position: [48.8606, 2.3376],
         title: 'Station Mobile 1',
-        description: 'Station mobile près de l\'Arc de Triomphe',
+        description: "Station mobile près de l'Arc de Triomphe",
         isMobileStation: true,
       },
       {
@@ -105,6 +105,39 @@ export const WithMixedMarkers: Story = {
         title: 'Centre Pompidou',
         description: "Musée national d'art moderne au cœur de Paris.",
         isMobileStation: false,
+      },
+    ],
+  },
+};
+
+export const WithProblems: Story = {
+  args: {
+    ...Default.args,
+    zoom: 12,
+    markers: [
+      {
+        position: [48.8566, 2.3522],
+        title: 'Problème critique',
+        description: 'Niveau de pollution élevé',
+        problemType: 'high',
+      },
+      {
+        position: [48.8606, 2.3376],
+        title: 'Problème modéré',
+        description: 'Niveau de pollution moyen',
+        problemType: 'medium',
+      },
+      {
+        position: [48.8656, 2.3412],
+        title: 'Problème mineur',
+        description: 'Niveau de pollution faible',
+        problemType: 'low',
+      },
+      {
+        position: [48.8619, 2.3532],
+        title: 'Station Mobile',
+        description: 'Station de mesure mobile',
+        isMobileStation: true,
       },
     ],
   },

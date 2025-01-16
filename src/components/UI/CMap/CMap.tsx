@@ -11,6 +11,8 @@ interface MarkerData {
   title: string;
   description: string;
   isMobileStation?: boolean;
+  problemType?: 'low' | 'medium' | 'high';
+  color?: string;
 }
 
 interface CMapProps {
@@ -35,6 +37,28 @@ const defaultIcon = L.icon({
   iconSize: [25, 41],
   iconAnchor: [12, 41],
 });
+
+const createProblemIcon = (color: string) =>
+  L.divIcon({
+    html: `<div style="background-color: ${color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white;"></div>`,
+    className: 'problem-marker',
+    iconSize: [16, 16],
+    iconAnchor: [8, 8],
+  });
+
+const getMarkerIcon = (marker: MarkerData) => {
+  if (marker.problemType) {
+    const colors = {
+      low: '#FFC107', // Jaune
+      medium: '#FF9800', // Orange
+      high: '#F44336', // Rouge
+    };
+
+    return createProblemIcon(marker.color || colors[marker.problemType]);
+  }
+
+  return marker.isMobileStation ? triangleIcon : defaultIcon;
+};
 
 const CMap: React.FC<CMapProps> = ({
   center,
@@ -146,7 +170,7 @@ const CMap: React.FC<CMapProps> = ({
             <Marker
               key={index}
               position={marker.position}
-              icon={marker.isMobileStation ? triangleIcon : defaultIcon}
+              icon={getMarkerIcon(marker)}
               eventHandlers={{
                 click: () => setSelectedMarker(marker),
               }}
