@@ -1,14 +1,23 @@
 import React, { useState, useRef } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+import MarkerClusterGroup from '@changey/react-leaflet-markercluster';
 
 interface CMapProps {
   center: [number, number];
   zoom: number;
   children?: React.ReactNode;
+  height?: string;
 }
 
-const CMap: React.FC<CMapProps> = ({ center, zoom, children }) => {
+const CMap: React.FC<CMapProps> = ({
+  center,
+  zoom,
+  children,
+  height = '500px',
+}) => {
   const [isSatellite, setIsSatellite] = useState(false);
   const mapRef = useRef(null);
 
@@ -38,7 +47,7 @@ const CMap: React.FC<CMapProps> = ({ center, zoom, children }) => {
   };
 
   return (
-    <div style={{ height: '500px', width: '100%' }}>
+    <div style={{ height: height, width: '100%' }}>
       <div style={{ position: 'relative', zIndex: 1000 }}>
         <button
           onClick={() => setIsSatellite(!isSatellite)}
@@ -107,7 +116,7 @@ const CMap: React.FC<CMapProps> = ({ center, zoom, children }) => {
           }
           url={isSatellite ? mapStyles.satellite.url : mapStyles.street.url}
         />
-        {children}
+        <MarkerClusterGroup>{children}</MarkerClusterGroup>
       </MapContainer>
     </div>
   );

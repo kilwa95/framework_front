@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import CMap from './CMap';
+import { Marker } from 'react-leaflet';
 
 const meta: Meta<typeof CMap> = {
-  title: 'UI/Maps/CMap',
+  title: 'Components/CMap',
   component: CMap,
   parameters: {
     layout: 'fullscreen',
   },
-  tags: ['autodocs'],
 };
 
 export default meta;
@@ -17,19 +17,25 @@ export const Default: Story = {
   args: {
     center: [48.8566, 2.3522], // Paris coordinates
     zoom: 13,
+    height: '500px',
   },
 };
 
-export const ZoomedOut: Story = {
+export const WithMarkers: Story = {
   args: {
-    center: [48.8566, 2.3522],
-    zoom: 5,
+    ...Default.args,
+    children: (
+      <>
+        <Marker position={[48.8566, 2.3522]} />
+        <Marker position={[48.8606, 2.3376]} />
+      </>
+    ),
   },
 };
 
-export const DifferentLocation: Story = {
+export const Tall: Story = {
   args: {
-    center: [40.7128, -74.006], // New York coordinates
-    zoom: 12,
+    ...Default.args,
+    height: '800px',
   },
 };
