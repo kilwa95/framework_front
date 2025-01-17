@@ -1,6 +1,6 @@
 // src/components/map/MapContainer/index.tsx
 
-import { FC, useState } from 'react';
+import { FC, useState, useRef } from 'react';
 import { Paper, useTheme } from '@mui/material';
 import {
   MapContainer as LeafletMapContainer,
@@ -9,6 +9,7 @@ import {
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { styles } from './styles';
+import { MapControls } from '../MapControls/MapControls';
 
 // Types
 interface MapContainerProps {
@@ -34,6 +35,20 @@ export const MapContainer: FC<MapContainerProps> = ({
   // États
   const theme = useTheme();
   const [mapType, setMapType] = useState<'standard' | 'satellite'>('standard');
+  const mapRef = useRef(null);
+
+  // Gestionnaires d'événements pour les contrôles
+  const handleZoomIn = () => {
+    mapRef.current?.zoomIn();
+  };
+
+  const handleZoomOut = () => {
+    mapRef.current?.zoomOut();
+  };
+
+  const handleCenter = () => {
+    mapRef.current?.setView(center, zoom);
+  };
 
   return (
     <Paper
@@ -41,24 +56,15 @@ export const MapContainer: FC<MapContainerProps> = ({
       className={`relative ${className}`}
       sx={styles(theme).mapContainer}
     >
-      <button
-        onClick={() =>
-          setMapType((prev) => (prev === 'standard' ? 'satellite' : 'standard'))
-        }
-        style={{
-          position: 'absolute',
-          top: '10px',
-          left: '10px',
-          zIndex: 1000,
-          padding: '8px',
-          backgroundColor: 'white',
-          border: '2px solid rgba(0,0,0,0.2)',
-          borderRadius: '4px',
-        }}
-      >
-        {mapType === 'standard' ? 'Vue Satellite' : 'Vue Standard'}
-      </button>
+      <MapControls
+        mapType={mapType}
+        onMapTypeChange={setMapType}
+        onZoomIn={handleZoomIn}
+        onZoomOut={handleZoomOut}
+        onCenter={handleCenter}
+      />
       <LeafletMapContainer
+        ref={mapRef}
         center={center}
         zoom={zoom}
         zoomControl={false}

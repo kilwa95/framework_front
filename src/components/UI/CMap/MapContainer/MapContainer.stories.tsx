@@ -77,3 +77,27 @@ export const ConstrainedContainer: Story = {
     ),
   ],
 };
+
+// Story demonstrating map controls
+export const WithMapControls: Story = {
+  args: {},
+  decorators: [
+    (Story) => (
+      <ThemeProvider theme={theme}>
+        <Box sx={{ height: '600px', width: '100%', padding: 2 }}>
+          <Story />
+        </Box>
+      </ThemeProvider>
+    ),
+  ],
+  parameters: {
+    docs: {
+      description: {
+        story: `Cette vue démontre les contrôles de carte intégrés :
+        - Basculement entre vue standard et satellite
+        - Contrôles de zoom
+        - Bouton de recentrage`,
+      },
+    },
+  },
+};
