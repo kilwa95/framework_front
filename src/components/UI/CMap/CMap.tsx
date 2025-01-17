@@ -1,10 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster';
 import L from 'leaflet';
+import 'leaflet.heat';
 
 interface MarkerData {
   position: [number, number];
@@ -20,6 +21,8 @@ interface CMapProps {
   zoom: number;
   markers?: MarkerData[];
   height?: string;
+  showHeatmap?: boolean;
+  heatmapData?: Array<[number, number, number]>; // [lat, lng, intensity]
 }
 
 const triangleIcon = L.divIcon({
@@ -65,6 +68,8 @@ const CMap: React.FC<CMapProps> = ({
   zoom,
   markers = [],
   height = '500px',
+  showHeatmap = false,
+  heatmapData = [],
 }) => {
   const [isSatellite, setIsSatellite] = useState(false);
   const [selectedMarker, setSelectedMarker] = useState<MarkerData | null>(null);
@@ -94,6 +99,28 @@ const CMap: React.FC<CMapProps> = ({
       }
     }
   };
+
+  useEffect(() => {
+    if (showHeatmap && heatmapData.length > 0 && mapRef.current) {
+      const map = mapRef.current;
+      const heat = L.heatLayer(heatmapData, {
+        radius: 25,
+        blur: 15,
+        maxZoom: zoom,
+        max: 1.0,
+        gradient: {
+          0.4: 'blue',
+          0.6: 'lime',
+          0.8: 'yellow',
+          1.0: 'red',
+        },
+      }).addTo(map);
+
+      return () => {
+        map.removeLayer(heat);
+      };
+    }
+  }, [showHeatmap, heatmapData, zoom]);
 
   return (
     <div style={{ height: height, width: '100%' }}>

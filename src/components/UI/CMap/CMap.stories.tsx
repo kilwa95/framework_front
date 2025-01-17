@@ -142,3 +142,33 @@ export const WithProblems: Story = {
     ],
   },
 };
+
+export const WithNetworkCoverage: Story = {
+  args: {
+    ...Default.args,
+    zoom: 13,
+    showHeatmap: true,
+    heatmapData: [
+      [48.8566, 2.3522, 0.8], // Tour Eiffel - forte couverture
+      [48.8606, 2.3376, 0.6], // Arc de Triomphe - couverture moyenne
+      [48.8656, 2.3412, 0.9], // Parc Monceau - très forte couverture
+      [48.8619, 2.3532, 0.4], // Centre Pompidou - faible couverture
+      [48.8584, 2.3488, 0.7],
+      [48.8634, 2.3421, 0.5],
+      [48.8594, 2.3389, 0.6],
+      [48.8614, 2.3522, 0.8],
+    ],
+    markers: [
+      {
+        position: [48.8566, 2.3522],
+        title: 'Antenne principale',
+        description: 'Couverture réseau: Excellente',
+      },
+      {
+        position: [48.8619, 2.3532],
+        title: 'Antenne secondaire',
+        description: 'Couverture réseau: Moyenne',
+      },
+    ],
+  },
+};
