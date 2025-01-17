@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import CMap from './CMap';
 
 const meta: Meta<typeof CMap> = {
-  title: 'Components/CMap',
+  title: 'UI/Map/CMap',
   component: CMap,
   parameters: {
     layout: 'fullscreen',
