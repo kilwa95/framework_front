@@ -26,7 +26,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Exemple de données de sites
+// Exemple de données de sites avec statuts correspondant à la légende
 const sampleSites = [
   {
     id: '1',
@@ -52,78 +52,18 @@ const sampleSites = [
     coverage: { angle: 270, radius: 8 },
     lastUpdate: new Date().toISOString(),
   },
-] as const;
-
-// Exemple de données d'incidents groupés
-const sampleIncidents = [
-  // Groupe 1 : Incidents proches dans Paris Centre
-  {
-    id: '1',
-    position: [48.8566, 2.3522],
-    type: 'call',
-    status: 'new',
-    timestamp: new Date().toISOString(),
-    description: 'Perte de connexion',
-  },
-  {
-    id: '2',
-    position: [48.8568, 2.3524],
-    type: 'data',
-    status: 'processing',
-    timestamp: new Date().toISOString(),
-    description: 'Débit réduit',
-  },
-  {
-    id: '3',
-    position: [48.8565, 2.3520],
-    type: 'sms',
-    status: 'new',
-    timestamp: new Date().toISOString(),
-    description: 'Échec d\'envoi SMS',
-  },
-  // Groupe 2 : Incidents dans Paris Est
   {
     id: '4',
-    position: [48.85, 2.4],
-    type: 'call',
-    status: 'resolved',
-    timestamp: new Date().toISOString(),
-    description: 'Appels interrompus',
-  },
-  {
-    id: '5',
-    position: [48.851, 2.401],
-    type: 'data',
-    status: 'processing',
-    timestamp: new Date().toISOString(),
-    description: 'Latence réseau',
-  },
-  // Incidents isolés
-  {
-    id: '6',
-    position: [48.86, 2.3],
-    type: 'other',
-    status: 'new',
-    timestamp: new Date().toISOString(),
-    description: 'Problème technique',
+    position: [48.87, 2.35],
+    name: 'Site Paris Maintenance',
+    status: 'maintenance',
+    coverage: { angle: 90, radius: 6 },
+    lastUpdate: new Date().toISOString(),
   },
 ] as const;
 
-// Story de base
-export const Default: Story = {
-  args: {},
-};
-
-// Story avec localisation personnalisée
-export const CustomLocation: Story = {
-  args: {
-    center: [48.8566, 2.3522],
-    zoom: 12,
-  },
-};
-
-// Story avec sites
-export const WithSites: Story = {
+// Story avec légende et sites
+export const WithLegendAndSites: Story = {
   args: {
     center: [48.8566, 2.3522],
     zoom: 12,
@@ -132,73 +72,88 @@ export const WithSites: Story = {
   parameters: {
     docs: {
       description: {
-        story: `Carte avec marqueurs de sites :
-        - Différents statuts (actif, avertissement, erreur)
-        - Orientations variables des marqueurs
-        - Popups d'information détaillée`,
+        story: `Carte avec légende interactive et sites :
+        - Légende détaillée des statuts de sites
+        - Sites avec différents statuts correspondant à la légende
+        - Possibilité de basculer entre les vues "Sites" et "Couverture"
+        - Informations détaillées au survol des éléments de légende`,
       },
     },
   },
 };
 
-// Story avec clustering d'incidents
-export const WithIncidentClusters: Story = {
+// Story avec légende et couverture
+export const WithLegendAndCoverage: Story = {
   args: {
     center: [48.8566, 2.3522],
-    zoom: 13,
-    incidents: sampleIncidents,
-    onIncidentClick: (incident) => {
-      console.log('Incident cliqué:', incident);
-      alert(`Incident: ${incident.description} (${incident.type})`);
-    },
-    onClusterClick: (incidents) => {
-      console.log('Cluster cliqué:', incidents);
-      alert(`Groupe de ${incidents.length} incidents dans cette zone`);
-    },
+    zoom: 12,
+    sites: sampleSites.map((site) => ({
+      ...site,
+      coverage: {
+        ...site.coverage,
+        quality:
+          site.status === 'active'
+            ? 'Optimal'
+            : site.status === 'warning'
+              ? 'Passable'
+              : site.status === 'error'
+                ? 'Très mauvais'
+                : 'Mauvais',
+      },
+    })),
   },
   parameters: {
     docs: {
       description: {
-        story: `Carte avec clustering d'incidents :
-        - Regroupement automatique des incidents proches
-        - Différenciation visuelle par nombre d'incidents (couleurs)
-        - Types variés d'incidents (appel, données, SMS)
-        - États différents (nouveau, en cours, résolu)
-        - Gestion des clics sur incidents et clusters`,
+        story: `Carte avec légende de couverture :
+        - Visualisation des niveaux de couverture
+        - Correspondance entre statuts et qualité de couverture
+        - Légende interactive avec indicateurs de niveau`,
       },
     },
   },
 };
 
-// Story complète
-export const FullFeatured: Story = {
+// Story complète avec toutes les fonctionnalités
+export const FullFeaturedWithLegend: Story = {
   args: {
     center: [48.8566, 2.3522],
     zoom: 12,
     sites: sampleSites,
-    incidents: sampleIncidents,
+    incidents: [
+      {
+        id: '1',
+        position: [48.8566, 2.3522],
+        type: 'call',
+        status: 'new',
+        timestamp: new Date().toISOString(),
+        description: 'Perte de connexion',
+      },
+      {
+        id: '2',
+        position: [48.85, 2.4],
+        type: 'data',
+        status: 'processing',
+        timestamp: new Date().toISOString(),
+        description: 'Problème de débit',
+      },
+    ],
     onSiteClick: (site) => {
       console.log('Site cliqué:', site);
-      alert(`Site: ${site.name} (${site.status})`);
-    },
-    onIncidentClick: (incident) => {
-      console.log('Incident cliqué:', incident);
-      alert(`Incident: ${incident.description} (${incident.type})`);
-    },
-    onClusterClick: (incidents) => {
-      console.log('Cluster cliqué:', incidents);
-      alert(`Groupe de ${incidents.length} incidents dans cette zone`);
+      alert(
+        `Site: ${site.name} (${site.status})\nCouverture: ${site.coverage.radius}km`,
+      );
     },
   },
   parameters: {
     docs: {
       description: {
-        story: `Démonstration complète :
-        - Sites avec différents statuts et couvertures
-        - Clustering d'incidents
-        - Gestion des clics sur sites, incidents et clusters
-        - Contrôles de carte (zoom, type de vue)
-        - Popups d'information détaillée`,
+        story: `Démonstration complète avec légende interactive :
+        - Légende complète avec statuts et couverture
+        - Sites avec différents statuts et rayons de couverture
+        - Incidents géolocalisés
+        - Interactions sur les sites et la légende
+        - Informations détaillées dans les popups et tooltips`,
       },
     },
   },

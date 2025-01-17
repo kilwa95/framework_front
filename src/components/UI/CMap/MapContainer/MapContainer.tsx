@@ -10,6 +10,7 @@ import {
 import 'leaflet/dist/leaflet.css';
 import { styles } from './styles';
 import { MapControls } from '../MapControls/MapControls';
+import { MapLegend } from '../MapLegend/MapLegend';
 import { SiteMarkers } from '../SiteMarkers/SiteMarkers';
 import { Clusters } from '../Clusters/Clusters';
 import type { Site } from '../SiteMarkers/SiteMarkers';
@@ -81,6 +82,7 @@ export const MapContainer: FC<MapContainerProps> = ({
       className={`relative ${className}`}
       sx={styles(theme).mapContainer}
     >
+      {/* Contrôles de la carte */}
       <MapControls
         mapType={mapType}
         onMapTypeChange={setMapType}
@@ -88,6 +90,11 @@ export const MapContainer: FC<MapContainerProps> = ({
         onZoomOut={handleZoomOut}
         onCenter={handleCenter}
       />
+
+      {/* Légende de la carte */}
+      <MapLegend />
+
+      {/* Conteneur de la carte */}
       <LeafletMapContainer
         ref={mapRef}
         center={center}
