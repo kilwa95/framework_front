@@ -11,16 +11,31 @@ import 'leaflet/dist/leaflet.css';
 import { styles } from './styles';
 import { MapControls } from '../MapControls/MapControls';
 import { SiteMarkers } from '../SiteMarkers/SiteMarkers';
+import { Clusters } from '../Clusters/Clusters';
 import type { Site } from '../SiteMarkers/SiteMarkers';
 
 // Types
+interface Incident {
+  id: string;
+  position: [number, number];
+  type: 'call' | 'data' | 'sms' | 'other';
+  status: 'new' | 'processing' | 'resolved';
+  timestamp: string;
+  description: string;
+}
+
 interface MapContainerProps {
   center?: [number, number];
   zoom?: number;
   className?: string;
   sites?: Site[];
+  incidents?: Incident[];
   // eslint-disable-next-line no-unused-vars
   onSiteClick?: (site: Site) => void;
+  // eslint-disable-next-line no-unused-vars
+  onIncidentClick?: (incident: Incident) => void;
+  // eslint-disable-next-line no-unused-vars
+  onClusterClick?: (incidents: Incident[]) => void;
 }
 
 // Constantes
@@ -37,7 +52,10 @@ export const MapContainer: FC<MapContainerProps> = ({
   zoom = DEFAULT_ZOOM,
   className = '',
   sites = [],
+  incidents = [],
   onSiteClick,
+  onIncidentClick,
+  onClusterClick,
 }) => {
   // États
   const theme = useTheme();
@@ -88,11 +106,15 @@ export const MapContainer: FC<MapContainerProps> = ({
         {/* Contrôle de zoom */}
         <ZoomControl position="topright" />
 
-        {/* Emplacement pour les futurs composants */}
-        {/* <Clusters /> */}
+        {/* Clusters d'incidents */}
+        <Clusters
+          incidents={incidents}
+          onClusterClick={onClusterClick}
+          onIncidentClick={onIncidentClick}
+        />
+
+        {/* Marqueurs de sites */}
         <SiteMarkers sites={sites} onSiteClick={onSiteClick} />
-        {/* <MapControls onMapTypeChange={setMapType} /> */}
-        {/* <MapLegend /> */}
       </LeafletMapContainer>
     </Paper>
   );

@@ -26,87 +26,11 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Default story showing France center
-export const Default: Story = {
-  args: {},
-};
-
-// Story with custom center and zoom
-export const CustomLocation: Story = {
-  args: {
-    center: [48.8566, 2.3522], // Paris coordinates
-    zoom: 12,
-  },
-};
-
-// Story with custom height through className
-export const CustomHeight: Story = {
-  args: {
-    className: 'h-[400px]',
-  },
-};
-
-// Story with custom styling
-export const CustomStyling: Story = {
-  args: {
-    className: 'rounded-xl shadow-lg',
-  },
-  decorators: [
-    (Story) => (
-      <ThemeProvider theme={theme}>
-        <Box sx={{ height: '500px', width: '100%', padding: 2 }}>
-          <Story />
-        </Box>
-      </ThemeProvider>
-    ),
-  ],
-};
-
-// Story showing map in a constrained container
-export const ConstrainedContainer: Story = {
-  args: {},
-  decorators: [
-    (Story) => (
-      <ThemeProvider theme={theme}>
-        <Box
-          sx={{ height: '400px', width: '600px', margin: 'auto', padding: 2 }}
-        >
-          <Story />
-        </Box>
-      </ThemeProvider>
-    ),
-  ],
-};
-
-// Story demonstrating map controls
-export const WithMapControls: Story = {
-  args: {},
-  decorators: [
-    (Story) => (
-      <ThemeProvider theme={theme}>
-        <Box sx={{ height: '600px', width: '100%', padding: 2 }}>
-          <Story />
-        </Box>
-      </ThemeProvider>
-    ),
-  ],
-  parameters: {
-    docs: {
-      description: {
-        story: `Cette vue démontre les contrôles de carte intégrés :
-        - Basculement entre vue standard et satellite
-        - Contrôles de zoom
-        - Bouton de recentrage`,
-      },
-    },
-  },
-};
-
 // Exemple de données de sites
 const sampleSites = [
   {
     id: '1',
-    position: [48.8566, 2.3522], // Paris
+    position: [48.8566, 2.3522],
     name: 'Site Paris Centre',
     status: 'active',
     coverage: { angle: 45, radius: 10 },
@@ -114,7 +38,7 @@ const sampleSites = [
   },
   {
     id: '2',
-    position: [48.85, 2.4], // Paris Est
+    position: [48.85, 2.4],
     name: 'Site Paris Est',
     status: 'warning',
     coverage: { angle: 180, radius: 5 },
@@ -122,66 +46,159 @@ const sampleSites = [
   },
   {
     id: '3',
-    position: [48.86, 2.3], // Paris Nord
+    position: [48.86, 2.3],
     name: 'Site Paris Nord',
     status: 'error',
     coverage: { angle: 270, radius: 8 },
     lastUpdate: new Date().toISOString(),
   },
+] as const;
+
+// Exemple de données d'incidents groupés
+const sampleIncidents = [
+  // Groupe 1 : Incidents proches dans Paris Centre
+  {
+    id: '1',
+    position: [48.8566, 2.3522],
+    type: 'call',
+    status: 'new',
+    timestamp: new Date().toISOString(),
+    description: 'Perte de connexion',
+  },
+  {
+    id: '2',
+    position: [48.8568, 2.3524],
+    type: 'data',
+    status: 'processing',
+    timestamp: new Date().toISOString(),
+    description: 'Débit réduit',
+  },
+  {
+    id: '3',
+    position: [48.8565, 2.3520],
+    type: 'sms',
+    status: 'new',
+    timestamp: new Date().toISOString(),
+    description: 'Échec d\'envoi SMS',
+  },
+  // Groupe 2 : Incidents dans Paris Est
   {
     id: '4',
-    position: [48.84, 2.35], // Paris Sud
-    name: 'Site Maintenance',
-    status: 'maintenance',
-    coverage: { angle: 90, radius: 15 },
-    lastUpdate: new Date().toISOString(),
+    position: [48.85, 2.4],
+    type: 'call',
+    status: 'resolved',
+    timestamp: new Date().toISOString(),
+    description: 'Appels interrompus',
+  },
+  {
+    id: '5',
+    position: [48.851, 2.401],
+    type: 'data',
+    status: 'processing',
+    timestamp: new Date().toISOString(),
+    description: 'Latence réseau',
+  },
+  // Incidents isolés
+  {
+    id: '6',
+    position: [48.86, 2.3],
+    type: 'other',
+    status: 'new',
+    timestamp: new Date().toISOString(),
+    description: 'Problème technique',
   },
 ] as const;
 
-// Story avec des sites
+// Story de base
+export const Default: Story = {
+  args: {},
+};
+
+// Story avec localisation personnalisée
+export const CustomLocation: Story = {
+  args: {
+    center: [48.8566, 2.3522],
+    zoom: 12,
+  },
+};
+
+// Story avec sites
 export const WithSites: Story = {
   args: {
-    center: [48.8566, 2.3522], // Paris
+    center: [48.8566, 2.3522],
     zoom: 12,
     sites: sampleSites,
   },
   parameters: {
     docs: {
       description: {
-        story: `Cette vue montre la carte avec des marqueurs de sites :
-        - Sites avec différents statuts (actif, avertissement, erreur, maintenance)
-        - Différentes orientations des marqueurs
-        - Popups avec informations détaillées`,
+        story: `Carte avec marqueurs de sites :
+        - Différents statuts (actif, avertissement, erreur)
+        - Orientations variables des marqueurs
+        - Popups d'information détaillée`,
       },
     },
   },
 };
 
-// Story avec un seul site
-export const SingleSite: Story = {
+// Story avec clustering d'incidents
+export const WithIncidentClusters: Story = {
   args: {
     center: [48.8566, 2.3522],
-    zoom: 14,
-    sites: [sampleSites[0]],
-  },
-};
-
-// Story avec gestion des clics
-export const WithClickHandling: Story = {
-  args: {
-    center: [48.8566, 2.3522],
-    zoom: 12,
-    sites: sampleSites,
-    onSiteClick: (site) => {
-      console.log('Site cliqué:', site);
-      alert(`Site cliqué: ${site.name}`);
+    zoom: 13,
+    incidents: sampleIncidents,
+    onIncidentClick: (incident) => {
+      console.log('Incident cliqué:', incident);
+      alert(`Incident: ${incident.description} (${incident.type})`);
+    },
+    onClusterClick: (incidents) => {
+      console.log('Cluster cliqué:', incidents);
+      alert(`Groupe de ${incidents.length} incidents dans cette zone`);
     },
   },
   parameters: {
     docs: {
       description: {
-        story:
-          "Cette vue démontre la gestion des clics sur les marqueurs de sites. Cliquez sur un marqueur pour voir l'action.",
+        story: `Carte avec clustering d'incidents :
+        - Regroupement automatique des incidents proches
+        - Différenciation visuelle par nombre d'incidents (couleurs)
+        - Types variés d'incidents (appel, données, SMS)
+        - États différents (nouveau, en cours, résolu)
+        - Gestion des clics sur incidents et clusters`,
+      },
+    },
+  },
+};
+
+// Story complète
+export const FullFeatured: Story = {
+  args: {
+    center: [48.8566, 2.3522],
+    zoom: 12,
+    sites: sampleSites,
+    incidents: sampleIncidents,
+    onSiteClick: (site) => {
+      console.log('Site cliqué:', site);
+      alert(`Site: ${site.name} (${site.status})`);
+    },
+    onIncidentClick: (incident) => {
+      console.log('Incident cliqué:', incident);
+      alert(`Incident: ${incident.description} (${incident.type})`);
+    },
+    onClusterClick: (incidents) => {
+      console.log('Cluster cliqué:', incidents);
+      alert(`Groupe de ${incidents.length} incidents dans cette zone`);
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: `Démonstration complète :
+        - Sites avec différents statuts et couvertures
+        - Clustering d'incidents
+        - Gestion des clics sur sites, incidents et clusters
+        - Contrôles de carte (zoom, type de vue)
+        - Popups d'information détaillée`,
       },
     },
   },
