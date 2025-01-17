@@ -10,12 +10,17 @@ import {
 import 'leaflet/dist/leaflet.css';
 import { styles } from './styles';
 import { MapControls } from '../MapControls/MapControls';
+import { SiteMarkers } from '../SiteMarkers/SiteMarkers';
+import type { Site } from '../SiteMarkers/SiteMarkers';
 
 // Types
 interface MapContainerProps {
   center?: [number, number];
   zoom?: number;
   className?: string;
+  sites?: Site[];
+  // eslint-disable-next-line no-unused-vars
+  onSiteClick?: (site: Site) => void;
 }
 
 // Constantes
@@ -31,6 +36,8 @@ export const MapContainer: FC<MapContainerProps> = ({
   center = DEFAULT_CENTER,
   zoom = DEFAULT_ZOOM,
   className = '',
+  sites = [],
+  onSiteClick,
 }) => {
   // États
   const theme = useTheme();
@@ -83,7 +90,7 @@ export const MapContainer: FC<MapContainerProps> = ({
 
         {/* Emplacement pour les futurs composants */}
         {/* <Clusters /> */}
-        {/* <SiteMarkers /> */}
+        <SiteMarkers sites={sites} onSiteClick={onSiteClick} />
         {/* <MapControls onMapTypeChange={setMapType} /> */}
         {/* <MapLegend /> */}
       </LeafletMapContainer>
