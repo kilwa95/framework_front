@@ -1,5 +1,9 @@
 /* eslint-disable no-unused-vars */
-import { useState } from 'react';
+import { useReducer } from 'react';
+import {
+  locationHierarchyReducer,
+  initialState,
+} from '../reducers/useLocationHierarchyReducer';
 
 interface Location {
   id: string;
@@ -22,34 +26,19 @@ export const useLocationHierarchy = ({
   initialData,
   loadData,
 }: UseLocationHierarchyProps) => {
-  const [regions, setRegions] = useState<Location[]>(
-    initialData?.regions || []
-  );
-  const [departments, setDepartments] = useState<Location[]>([]);
-  const [cities, setCities] = useState<Location[]>([]);
-
-  const [selectedRegion, setSelectedRegion] = useState<Location | null>(null);
-  const [selectedDepartment, setSelectedDepartment] = useState<Location | null>(
-    null
-  );
-  const [selectedCity, setSelectedCity] = useState<Location | null>(null);
-
-  const [isLoading, setIsLoading] = useState({
-    departments: false,
-    cities: false,
+  const [state, dispatch] = useReducer(locationHierarchyReducer, {
+    ...initialState,
+    regions: initialData?.regions || [],
   });
 
   const handleRegionChange = async (regionId: string) => {
-    const region = regions.find((r) => r.id === regionId) || null;
+    const region = state.regions.find((r) => r.id === regionId) || null;
 
-    setSelectedRegion(region);
-    setSelectedDepartment(null);
-    setSelectedCity(null);
-    setCities([]);
+    dispatch({ type: 'SELECT_REGION', payload: region });
 
     if (!region) return;
 
-    setIsLoading((prev) => ({ ...prev, departments: true }));
+    dispatch({ type: 'SET_LOADING', resource: 'departments', payload: true });
     try {
       let newDepartments: Location[];
       if (loadData?.departments) {
@@ -57,21 +46,25 @@ export const useLocationHierarchy = ({
       } else {
         newDepartments = initialData?.departments[regionId] || [];
       }
-      setDepartments(newDepartments);
+      dispatch({ type: 'SET_DEPARTMENTS', payload: newDepartments });
     } finally {
-      setIsLoading((prev) => ({ ...prev, departments: false }));
+      dispatch({
+        type: 'SET_LOADING',
+        resource: 'departments',
+        payload: false,
+      });
     }
   };
 
   const handleDepartmentChange = async (departmentId: string) => {
-    const department = departments.find((d) => d.id === departmentId) || null;
+    const department =
+      state.departments.find((d) => d.id === departmentId) || null;
 
-    setSelectedDepartment(department);
-    setSelectedCity(null);
+    dispatch({ type: 'SELECT_DEPARTMENT', payload: department });
 
     if (!department) return;
 
-    setIsLoading((prev) => ({ ...prev, cities: true }));
+    dispatch({ type: 'SET_LOADING', resource: 'cities', payload: true });
     try {
       let newCities: Location[];
       if (loadData?.cities) {
@@ -79,26 +72,20 @@ export const useLocationHierarchy = ({
       } else {
         newCities = initialData?.cities[departmentId] || [];
       }
-      setCities(newCities);
+      dispatch({ type: 'SET_CITIES', payload: newCities });
     } finally {
-      setIsLoading((prev) => ({ ...prev, cities: false }));
+      dispatch({ type: 'SET_LOADING', resource: 'cities', payload: false });
     }
   };
 
   const handleCityChange = (cityId: string) => {
-    const city = cities.find((c) => c.id === cityId) || null;
+    const city = state.cities.find((c) => c.id === cityId) || null;
 
-    setSelectedCity(city);
+    dispatch({ type: 'SELECT_CITY', payload: city });
   };
 
   return {
-    regions,
-    departments,
-    cities,
-    selectedRegion,
-    selectedDepartment,
-    selectedCity,
-    isLoading,
+    ...state,
     handleRegionChange,
     handleDepartmentChange,
     handleCityChange,
