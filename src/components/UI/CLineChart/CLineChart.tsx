@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, SxProps, Theme, useTheme } from '@mui/material';
-import { CurveType, LineChart } from '@mui/x-charts';
+import { LineChart } from '@mui/x-charts';
 import { LineChartData } from '../types';
 
 import { cLineChartStyles } from './styles';
@@ -23,8 +23,6 @@ const CLineChart: React.FC<CLineChartProps> = ({ data, colors, sx }) => {
   ];
 
   const series = data.map((item: LineChartData) => ({
-    id: item.label.toLowerCase().replace(' ', '-'),
-    curve: 'catmullRom' as CurveType,
     label: item.label,
     data: item.data,
     showMark: false,
