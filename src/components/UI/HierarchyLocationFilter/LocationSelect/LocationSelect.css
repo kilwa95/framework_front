@@ -1,0 +1,59 @@
+.location-select-container {
+  flex: 1;
+}
+
+.location-select-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #65676B;
+  margin-bottom: 0.375rem;
+}
+
+.dark .location-select-label {
+  color: rgb(156, 163, 175);
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.location-select {
+  width: 100%;
+  height: 2.5rem;
+  padding: 0 0.75rem;
+  background-color: #F0F2F5;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  color: #050505;
+  appearance: none;
+  transition: all 200ms;
+}
+
+.location-select:hover {
+  border-color: #1b74e4;
+}
+
+.location-select:focus {
+  border-color: #1b74e4;
+  box-shadow: 0 0 0 2px rgba(27, 116, 228, 0.3);
+}
+
+.dark .location-select {
+  background-color: #3A3B3C;
+  color: rgb(229, 231, 235);
+}
+
+.select-icon {
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.select-icon svg {
+  width: 1rem;
+  height: 1rem;
+  color: rgb(156, 163, 175);
+} 
