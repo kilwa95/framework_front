@@ -2,6 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import {
   AppBar,
   Box,
+  Button,
   Container,
   Drawer,
   IconButton,
@@ -90,6 +91,12 @@ const HomeNavbar: React.FC<Props> = ({ children }) => {
               >
                 <HomeIcon />
               </IconButton>
+              <Button
+                variant="contained"
+                onClick={() => navigate('/portfolio')}
+              >
+                Portfolio
+              </Button>
               {isTablet && (
                 <>
                   <IconButton

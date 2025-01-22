@@ -7,16 +7,15 @@ import { useAppSelector } from 'src/hooks';
 
 const LandingPage = () => {
   const theme = useTheme();
-  const user = useAppSelector((state) => state.auth.login.user);
+  const user = useAppSelector((state) => state.auth.userInfos.data);
 
   return (
     <Box sx={landingPageStyles(theme).mainWrapper}>
       <Box sx={landingPageStyles(theme).cardContainer}>
         <Typography variant="h2" sx={landingPageStyles(theme).title}>
-          Bonjour
+          Bonjour{' '}
           <Typography component="span" sx={landingPageStyles(theme).username}>
-            {' '}
-            {user?.username}
+            {user?.first_name} {user?.last_name}
           </Typography>
         </Typography>
       </Box>
