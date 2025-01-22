@@ -4,6 +4,9 @@ import CInfosTitleWrapper from 'src/components/UI/CInfosTitleWrapper/CInfosTitle
 import { componentsPagesStyles } from '../styles';
 import CPieChartCard from './CPieChartCard';
 import CLineChartCard from './CLineChartCard';
+import CPieChartArcCard from './CPieChartArcCard';
+import CBarChartCard from './CBarChartCard';
+import CArcGaugeCard from 'src/components/UI/CArcGauge/CArcGaugeCard';
 
 const ChartPage: React.FC = () => {
   const theme = useTheme();
@@ -13,6 +16,9 @@ const ChartPage: React.FC = () => {
       <Box sx={componentsPagesStyles(theme).gridWrapper}>
         <CPieChartCard />
         <CLineChartCard />
+        <CPieChartArcCard />
+        <CBarChartCard />
+        <CArcGaugeCard />
       </Box>
     </CInfosTitleWrapper>
   );

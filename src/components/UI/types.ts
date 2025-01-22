@@ -119,6 +119,11 @@ export interface PieChartData {
   label: string;
   value: number;
 }
+export interface PieArcChartData {
+  label: string;
+  value: number;
+  color: string;
+}
 
 export interface LineChartData {
   label: string;
