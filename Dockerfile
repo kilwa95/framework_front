@@ -1,15 +1,18 @@
 # Use an official Node runtime as a parent image
 FROM node:18-alpine
 
-# set working directory
+# Set working directory
 WORKDIR /app
 
-# add app
+# Add app
 COPY . .
 
+# Install concurrently globally and other dependencies
+RUN npm install -g concurrently
 RUN npm install
-RUN npm install react-scripts@5.0.1 -g
 
-CMD ["npm", "start"]
+# Expose both Vite and Storybook ports
+EXPOSE 5173 6006
 
-EXPOSE 3000
+# Start development server with both Vite and Storybook
+CMD ["npm", "run", "dev"]

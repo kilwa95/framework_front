@@ -48,6 +48,7 @@
     "yup": "^1.3.3"
   },
   "scripts": {
+    "dev": "concurrently \"vite --host 0.0.0.0 --port 5173\" \"storybook dev -p 6006 --host 0.0.0.0 --ci\"",
     "start": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
@@ -94,6 +95,7 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-sort-imports-es6-autofix": "^0.6.0",
     "jsdom": "^24.0.0",
-    "vitest": "^1.6.0"
+    "vitest": "^1.6.0",
+    "concurrently": "^8.0.0"
   }
 }
