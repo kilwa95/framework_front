@@ -9,6 +9,7 @@ import LandingPage from './pages/LandingPage/LandingPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import PortfolioRoutes from './pages/PortfolioPage/PortfolioRoutes';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
+import NetworkSites from './pages/NetworkSites/NetworkSites';
 
 function App() {
   return (
@@ -35,6 +36,14 @@ function App() {
                       element={
                         <ProtectedRoute redirectPath="/">
                           <LandingPage />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path={ROUTES.network.path}
+                      element={
+                        <ProtectedRoute redirectPath="/">
+                          <NetworkSites />
                         </ProtectedRoute>
                       }
                     />
