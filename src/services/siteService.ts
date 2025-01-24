@@ -2,8 +2,8 @@ import { Site } from '../components/UI/CMap/SiteMarkers/SiteMarkers';
 import { Ticket } from '../pages/NetworkSites/Ticket';
 
 export const transformTicketToSite = (ticket: Ticket): Site => {
-  // TODO: Implémenter la géolocalisation à partir du code postal
-  const defaultPosition: [number, number] = [48.8566, 2.3522]; // Paris par défaut
+  // Centre approximatif de la France
+  const defaultPosition: [number, number] = [46.603354, 1.888334]; // Centre de la France
 
   return {
     id: ticket.TicketID,
