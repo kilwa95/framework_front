@@ -27,6 +27,5 @@ export const ROUTES_AUTH: Record<string, RouteParams> = {
 
 export const ROUTES: Record<string, RouteParams> = {
   home: { path: '/', isPrivate: true, page: 'LandingPage' },
-  network: { path: '/network', isPrivate: true, page: 'NetworkSites' },
   error: { path: '*', page: 'ErrorPage' },
 };

@@ -4,14 +4,21 @@ FROM node:18-alpine
 # Set working directory
 WORKDIR /app
 
-# Add app
-COPY . .
-
-# Install json-server globally along with concurrently
-RUN npm install -g concurrently json-server
+# Copy package files first
+COPY package*.json ./
 
 # Install dependencies
 RUN npm install
+
+# Copy source code
+COPY . .
+
+# Install global packages
+RUN npm install -g concurrently json-server
+
+# Add development specific environment variables
+ENV CHOKIDAR_USEPOLLING=true
+ENV WATCHPACK_POLLING=true
 
 # Expose Vite, Storybook, and json-server ports
 EXPOSE 5173 6006 3001

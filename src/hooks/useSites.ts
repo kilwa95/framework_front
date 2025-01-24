@@ -11,17 +11,27 @@ export const useSites = () => {
   useEffect(() => {
     const fetchSites = async () => {
       try {
-        const response = await fetch('http://localhost:3001/tickets');
-        const data = await response.json();
-        const { tickets } = data;
+        const response = await fetch(
+          `${import.meta.env.VITE_JSON_SERVER_URL}/tickets`
+        );
 
-        const transformedSites = tickets
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+
+        const transformedSites = data
           .filter((ticket: Ticket) => ticket.AffectedSiteCodes)
           .map(transformTicketToSite);
 
         setSites(transformedSites);
       } catch (err) {
-        setError('Erreur lors du chargement des sites');
+        console.log('err', err);
+        setError(
+          err instanceof Error
+            ? err.message
+            : 'Erreur lors du chargement des sites'
+        );
       } finally {
         setLoading(false);
       }

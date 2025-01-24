@@ -27,7 +27,7 @@ function App() {
         <Route
           path="/*"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute children={undefined}>
               <HomeLayout>
                 <Suspense fallback={<CCircularProgress />}>
                   <Routes>
@@ -39,14 +39,7 @@ function App() {
                         </ProtectedRoute>
                       }
                     />
-                    <Route
-                      path={ROUTES.network.path}
-                      element={
-                        <ProtectedRoute redirectPath="/">
-                          <NetworkSites />
-                        </ProtectedRoute>
-                      }
-                    />
+                    <Route path="/network" element={<NetworkSites />} />
                     <Route path={ROUTES.error.path} element={<ErrorPage />} />
                   </Routes>
                 </Suspense>

@@ -48,7 +48,7 @@
     "yup": "^1.3.3"
   },
   "scripts": {
-    "start": "vite --host 0.0.0.0 --port 5173",
+    "start": "VITE_USE_POLLING=true vite --host 0.0.0.0 --port 5173",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "test": "vitest",
@@ -56,7 +56,7 @@
     "storybook": "storybook dev --ci --port 6006 --host 0.0.0.0",
     "build-storybook": "storybook build",
     "server": "json-server --watch db.json --port 3001",
-    "dev": "concurrently \"npm run start\" \"npm run server\" \"npm run storybook\"",
+    "dev": "VITE_USE_POLLING=true concurrently \"npm run start\" \"npm run server\" \"npm run storybook\"",
     "dev:all": "concurrently \"npm run start\" \"npm run server\" \"npm run storybook\"",
     "dev:no-storybook": "concurrently \"npm run start\" \"npm run server\""
   },

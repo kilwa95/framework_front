@@ -10,14 +10,17 @@ services:
       - "6006:6006"  # Storybook
       - "3001:3001"  # json-server
     volumes:
-      - .:/app
+      - ./:/app:delegated
       - /app/node_modules
+      - /app/.git
     networks:
       - boilerplate_network
     env_file:
       - .env
     environment:
       - HOST=0.0.0.0  # Allow external connections
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
 
 networks:
   boilerplate_network:
