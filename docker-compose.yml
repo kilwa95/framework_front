@@ -8,6 +8,7 @@ services:
     ports:
       - "5173:5173"  # Vite dev server
       - "6006:6006"  # Storybook
+      - "3001:3001"  # json-server
     volumes:
       - .:/app
       - /app/node_modules

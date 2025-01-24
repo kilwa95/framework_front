@@ -7,12 +7,14 @@ WORKDIR /app
 # Add app
 COPY . .
 
-# Install concurrently globally and other dependencies
-RUN npm install -g concurrently
+# Install json-server globally along with concurrently
+RUN npm install -g concurrently json-server
+
+# Install dependencies
 RUN npm install
 
-# Expose both Vite and Storybook ports
-EXPOSE 5173 6006
+# Expose Vite, Storybook, and json-server ports
+EXPOSE 5173 6006 3001
 
-# Start development server with both Vite and Storybook
+# Start development server with both Vite, Storybook, and json-server
 CMD ["npm", "run", "dev"]
