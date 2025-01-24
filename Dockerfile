@@ -1,20 +1,18 @@
 # Use an official Node runtime as a parent image
 FROM node:18-alpine
 
-# set working directory
+# Set working directory
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
-
-# Install dependencies
-RUN npm install
-
-# Copy the rest of the application
+# Add app
 COPY . .
 
-# Expose ports for both Vite and Storybook
-EXPOSE 3000 6006
+# Install concurrently globally and other dependencies
+RUN npm install -g concurrently
+RUN npm install
 
-# Start development server
+# Expose both Vite and Storybook ports
+EXPOSE 5173 6006
+
+# Start development server with both Vite and Storybook
 CMD ["npm", "run", "dev"]
