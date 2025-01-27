@@ -6,6 +6,8 @@ import { useSites } from '../../hooks/useSites';
 const NetworkSites: FC = () => {
   const { sites, loading, error } = useSites();
 
+  console.log('sites', sites);
+
   if (loading) {
     return (
       <Box

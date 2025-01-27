@@ -12,7 +12,7 @@ export const useSites = () => {
     const fetchSites = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_JSON_SERVER_URL}/tickets`
+          `${import.meta.env.VITE_JSON_SERVER_URL}/tickets`,
         );
 
         if (!response.ok) {
@@ -20,9 +20,11 @@ export const useSites = () => {
         }
         const data = await response.json();
 
-        const transformedSites = data
-          .filter((ticket: Ticket) => ticket.AffectedSiteCodes)
-          .map(transformTicketToSite);
+        const transformedSites = await Promise.all(
+          data
+            .filter((ticket: Ticket) => ticket.AffectedSiteCodes)
+            .map(transformTicketToSite),
+        );
 
         setSites(transformedSites);
       } catch (err) {
@@ -30,7 +32,7 @@ export const useSites = () => {
         setError(
           err instanceof Error
             ? err.message
-            : 'Erreur lors du chargement des sites'
+            : 'Erreur lors du chargement des sites',
         );
       } finally {
         setLoading(false);
