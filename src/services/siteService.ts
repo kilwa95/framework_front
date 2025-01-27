@@ -16,6 +16,19 @@ export const transformTicketToSite = async (ticket: Ticket): Promise<Site> => {
       radius: 5,
     },
     lastUpdate: ticket.LastVerificationDate || ticket.AssignmentDate,
+    address: {
+      street: ticket.StreetAddress,
+      postalCode: ticket.PostalCode,
+      city: ticket.City,
+    },
+    ticket: {
+      id: ticket.TicketID,
+      problemFamily: ticket.ProblemFamily,
+      problemSubFamily: ticket.ProblemSubFamily,
+      responsible: ticket.Responsible,
+      creationDate: ticket.CreationDate,
+      status: ticket.Status,
+    },
   };
 };
 
@@ -32,7 +45,7 @@ const determineStatus = (ticket: Ticket): Site['status'] => {
 };
 
 export const geocodeSite = async (
-  ticket: Ticket,
+  ticket: Ticket
 ): Promise<[number, number]> => {
   const defaultPosition: [number, number] = [46.603354, 1.888334]; // Centre de la France
 
@@ -41,7 +54,7 @@ export const geocodeSite = async (
 
     // Utilisation de l'API Photon qui est basée sur OpenStreetMap
     const response = await fetch(
-      `https://photon.komoot.io/api/?q=${encodeURIComponent(address)}&limit=1`,
+      `https://photon.komoot.io/api/?q=${encodeURIComponent(address)}&limit=1`
     );
 
     if (!response.ok) {

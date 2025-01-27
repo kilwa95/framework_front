@@ -3,10 +3,13 @@ import {
   Box,
   CircularProgress,
   Alert,
-  Paper,
   Drawer,
   Typography,
   Button,
+  Divider,
+  Chip,
+  IconButton,
+  Link,
 } from '@mui/material';
 import { MapContainer } from '../../components/UI/CMap/MapContainer/MapContainer';
 import { useSites } from '../../hooks/useSites';
@@ -14,13 +17,14 @@ import { Site } from '../../components/UI/CMap/SiteMarkers/SiteMarkers';
 import CSearchbar from '../../components/UI/CSearchbar/CSearchbar';
 import CSelect from '../../components/UI/CSelect/CSelect';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import IconButton from '@mui/material/IconButton';
 import CTextField from '../../components/UI/CTextField/CTextField';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import CloseIcon from '@mui/icons-material/Close';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 
 interface SiteFilters {
   status: string[];
@@ -71,6 +75,113 @@ const filterPanelStyles = {
 
 // Constante pour la clé de stockage
 const FILTER_STORAGE_KEY = 'networkSites.filters';
+
+const SiteDetailsPanel: FC<{
+  site: Site | null;
+  onClose: () => void;
+}> = ({ site, onClose }) => {
+  if (!site) return null;
+
+  return (
+    <Drawer
+      anchor="right"
+      open={Boolean(site)}
+      onClose={onClose}
+      sx={{
+        '& .MuiDrawer-paper': {
+          width: 400,
+          padding: 3,
+          backgroundColor: 'background.paper',
+        },
+      }}
+    >
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        {/* Header */}
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <Typography variant="h6">Détails du site</Typography>
+          <IconButton onClick={onClose}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+
+        <Divider />
+
+        {/* Informations principales */}
+        <Box>
+          <Typography variant="subtitle1" fontWeight="bold">
+            {site.name}
+          </Typography>
+          <Chip
+            label={site.status}
+            color={
+              site.status === 'active'
+                ? 'success'
+                : site.status === 'warning'
+                  ? 'warning'
+                  : 'error'
+            }
+            size="small"
+            sx={{ mt: 1 }}
+          />
+        </Box>
+
+        {/* Localisation */}
+        <Box>
+          <Typography variant="subtitle2" color="text.secondary">
+            Localisation
+          </Typography>
+          <Typography>
+            {site.address?.street}
+            <br />
+            {site.address?.postalCode} {site.address?.city}
+          </Typography>
+        </Box>
+
+        {/* Couverture */}
+        <Box>
+          <Typography variant="subtitle2" color="text.secondary">
+            Couverture
+          </Typography>
+          <Typography>Rayon: {site.coverage.radius} km</Typography>
+          <Typography>Angle: {site.coverage.angle}°</Typography>
+        </Box>
+
+        {/* Ticket associé */}
+        <Box>
+          <Typography variant="subtitle2" color="text.secondary">
+            Ticket associé
+          </Typography>
+          <Link
+            href={`/tickets/${site.ticket?.id}`}
+            sx={{ textDecoration: 'none' }}
+          >
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<AssignmentIcon />}
+              sx={{ mt: 1 }}
+            >
+              Voir le ticket #{site.ticket?.id}
+            </Button>
+          </Link>
+        </Box>
+
+        {/* Dernière mise à jour */}
+        <Box sx={{ mt: 'auto' }}>
+          <Typography variant="caption" color="text.secondary">
+            Dernière mise à jour: {new Date(site.lastUpdate).toLocaleString()}
+          </Typography>
+        </Box>
+      </Box>
+    </Drawer>
+  );
+};
 
 const NetworkSites: FC = () => {
   const { sites, loading, error } = useSites();
@@ -323,30 +434,10 @@ const NetworkSites: FC = () => {
         }}
       />
 
-      {selectedSite && (
-        <Paper
-          elevation={3}
-          sx={{
-            position: 'absolute',
-            top: 20,
-            right: 20,
-            p: 2,
-            maxWidth: 300,
-            backgroundColor: 'rgba(255, 255, 255, 0.95)',
-            zIndex: 1000,
-          }}
-        >
-          <Box>
-            <strong>{selectedSite.name}</strong>
-            <p>Status: {selectedSite.status}</p>
-            <p>Couverture: {selectedSite.coverage.radius}km</p>
-            <p>
-              Dernière mise à jour:
-              {new Date(selectedSite.lastUpdate).toLocaleString()}
-            </p>
-          </Box>
-        </Paper>
-      )}
+      <SiteDetailsPanel
+        site={selectedSite}
+        onClose={() => setSelectedSite(null)}
+      />
     </Box>
   );
 };

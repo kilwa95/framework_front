@@ -7,7 +7,6 @@ import { Box, Typography, Chip } from '@mui/material';
 
 // Types
 export interface Site {
-  [x: string]: string;
   id: string;
   position: [number, number];
   name: string;
@@ -17,6 +16,19 @@ export interface Site {
     radius: number;
   };
   lastUpdate: string;
+  address?: {
+    street: string;
+    postalCode: number;
+    city: string;
+  };
+  ticket?: {
+    id: string;
+    problemFamily: string;
+    problemSubFamily: string;
+    responsible: string;
+    creationDate: string;
+    status: string;
+  };
 }
 
 interface SiteMarkersProps {
