@@ -7,6 +7,7 @@ import { Box, Typography, Chip } from '@mui/material';
 
 // Types
 export interface Site {
+  [x: string]: string;
   id: string;
   position: [number, number];
   name: string;
