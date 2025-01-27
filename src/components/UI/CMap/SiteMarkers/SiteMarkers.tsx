@@ -44,17 +44,40 @@ export const SiteMarkers: FC<SiteMarkersProps> = ({ sites, onSiteClick }) => {
     const style = document.createElement('style');
 
     style.textContent = `
+      .site-marker {
+        width: 20px;
+        height: 20px;
+        position: relative;
+      }
+
       .site-triangle {
         width: 0;
         height: 0;
         border-left: 10px solid transparent;
         border-right: 10px solid transparent;
         border-bottom: 17.3px solid #666;
+        transition: transform 0.3s ease;
       }
-      .site-triangle.active { border-bottom-color: #4caf50; }
-      .site-triangle.warning { border-bottom-color: #ff9800; }
-      .site-triangle.error { border-bottom-color: #f44336; }
-      .site-triangle.maintenance { border-bottom-color: #9e9e9e; }
+
+      .site-triangle:hover {
+        transform: scale(1.2) !important;
+      }
+
+      .site-triangle.active { 
+        border-bottom-color: #4caf50;
+      }
+
+      .site-triangle.warning { 
+        border-bottom-color: #ff9800;
+      }
+
+      .site-triangle.error { 
+        border-bottom-color: #f44336;
+      }
+
+      .site-triangle.maintenance { 
+        border-bottom-color: #9e9e9e;
+      }
     `;
     document.head.appendChild(style);
 
