@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // src/components/map/MapContainer/index.tsx
 
 import { FC, useState, useRef } from 'react';

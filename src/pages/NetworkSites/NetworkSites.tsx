@@ -28,7 +28,7 @@ const NetworkSites: FC = () => {
   const { sites, complaints, loading, error } = useSites();
   const [selectedSite, setSelectedSite] = useState<Site | null>(null);
   const [selectedComplaint, setSelectedComplaint] = useState<Complaint | null>(
-    null,
+    null
   );
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
@@ -42,7 +42,7 @@ const NetworkSites: FC = () => {
       return {
         ...parsedFilters,
         incidentStartDate: parsedFilters.incidentStartDate.map(
-          (date: string | null) => (date ? dayjs(date) : null),
+          (date: string | null) => (date ? dayjs(date) : null)
         ),
       };
     }
@@ -61,7 +61,7 @@ const NetworkSites: FC = () => {
     const filtersToSave = {
       ...filters,
       incidentStartDate: filters.incidentStartDate.map((date) =>
-        date ? date.toISOString() : null,
+        date ? date.toISOString() : null
       ),
     };
 
