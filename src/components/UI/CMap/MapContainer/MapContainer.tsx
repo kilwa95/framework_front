@@ -10,7 +10,6 @@ import {
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { styles } from './styles';
-import { MapControls } from '../MapControls/MapControls';
 import { MapLegend } from '../MapLegend/MapLegend';
 import { SiteMarkers } from '../SiteMarkers/SiteMarkers';
 import { Clusters } from '../Clusters/Clusters';
@@ -67,34 +66,12 @@ export const MapContainer: FC<MapContainerProps> = ({
   const [mapType, setMapType] = useState<'standard' | 'satellite'>('standard');
   const mapRef = useRef(null);
 
-  // Gestionnaires d'événements pour les contrôles
-  const handleZoomIn = () => {
-    mapRef.current?.zoomIn();
-  };
-
-  const handleZoomOut = () => {
-    mapRef.current?.zoomOut();
-  };
-
-  const handleCenter = () => {
-    mapRef.current?.setView(center, zoom);
-  };
-
   return (
     <Paper
       elevation={3}
       className={`relative ${className}`}
       sx={styles(theme).mapContainer}
     >
-      {/* Contrôles de la carte */}
-      <MapControls
-        mapType={mapType}
-        onMapTypeChange={setMapType}
-        onZoomIn={handleZoomIn}
-        onZoomOut={handleZoomOut}
-        onCenter={handleCenter}
-      />
-
       {/* Légende de la carte */}
       <MapLegend />
 
@@ -138,11 +115,3 @@ export const MapContainer: FC<MapContainerProps> = ({
     </Paper>
   );
 };
-
-// Styles pour corriger les icônes Leaflet
-// À ajouter dans votre fichier CSS global
-/*
-.leaflet-default-icon-path {
-  background-image: url(https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png);
-}
-*/
