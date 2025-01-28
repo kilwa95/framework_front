@@ -40,6 +40,22 @@ interface MapContainerProps {
   onIncidentClick?: (incident: Incident) => void;
 }
 
+interface ClusterItem {
+  id: string;
+  position: [number, number];
+  type: 'site' | 'complaint';
+  status: string;
+  data: Site | Complaint;
+}
+
+interface ClustersProps {
+  sites: Site[];
+  complaints: Complaint[];
+  onSiteClick?: (site: Site) => void;
+  onComplaintClick?: (complaint: Complaint) => void;
+  onClusterClick?: (items: ClusterItem[]) => void;
+}
+
 // Constantes
 const DEFAULT_CENTER: [number, number] = [46.227638, 2.213749]; // Centre de la France
 const DEFAULT_ZOOM = 6;
@@ -95,11 +111,30 @@ export const MapContainer: FC<MapContainerProps> = ({
         <ZoomControl position="topright" />
 
         {/* Clusters d'incidents */}
-        {incidents.length > 0 && (
+        {(sites.length > 0 || complaints.length > 0) && (
           <Clusters
-            incidents={incidents}
-            onClusterClick={onClusterClick}
-            onIncidentClick={onIncidentClick}
+            sites={sites}
+            complaints={complaints}
+            onSiteClick={onSiteClick}
+            onComplaintClick={onComplaintClick}
+            onClusterClick={(items) => {
+              // Vous pouvez gérer ici la logique pour traiter les différents types d'éléments
+              const sitesInCluster = items
+                .filter(
+                  (item): item is ClusterItem & { data: Site } =>
+                    item.type === 'site'
+                )
+                .map((item) => item.data);
+
+              const complaintsInCluster = items
+                .filter(
+                  (item): item is ClusterItem & { data: Complaint } =>
+                    item.type === 'complaint'
+                )
+                .map((item) => item.data);
+
+              // Gérer les éléments selon vos besoins
+            }}
           />
         )}
 

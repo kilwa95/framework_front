@@ -9,7 +9,28 @@
   font-weight: bold;
   font-size: 14px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border: 2px solid white;
 }
+
+.site-marker,
+.complaint-marker {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Styles spécifiques aux sites */
+.site-marker.active { background-color: #4caf50; }
+.site-marker.warning { background-color: #ff9800; }
+.site-marker.error { background-color: #f44336; }
+.site-marker.maintenance { background-color: #9e9e9e; }
+
+/* Styles spécifiques aux plaintes */
+.complaint-marker.pending { background-color: #f44336; }
+.complaint-marker.processing { background-color: #ff9800; }
+.complaint-marker.resolved { background-color: #4caf50; }
 
 .custom-cluster-icon {
   background: none;
