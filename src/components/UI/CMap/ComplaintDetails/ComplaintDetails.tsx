@@ -118,7 +118,9 @@ export const ComplaintDetails: FC<ComplaintDetailsProps> = ({
         {/* Lien vers le ticket */}
         <Box>
           <Link
-            href={`/tickets/${complaint.ticketId}`}
+            href={complaint.linkedTicket}
+            target="_blank"
+            rel="noopener noreferrer"
             sx={{ textDecoration: 'none' }}
           >
             <Button

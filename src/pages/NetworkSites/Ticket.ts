@@ -56,6 +56,7 @@ interface Complaint {
   position: [number, number];
   ticketId: string;
   status: 'pending' | 'processing' | 'resolved';
+  linkedTicket: string;
 }
 
 export type { Ticket, Complaint };

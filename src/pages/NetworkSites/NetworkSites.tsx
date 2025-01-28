@@ -26,6 +26,9 @@ const filterButtonStyle = {
 
 const NetworkSites: FC = () => {
   const { sites, complaints, loading, error } = useSites();
+
+  console.log('complaints', complaints[0]);
+  console.log('sites', sites[0]);
   const [selectedSite, setSelectedSite] = useState<Site | null>(null);
   const [selectedComplaint, setSelectedComplaint] = useState<Complaint | null>(
     null
