@@ -51,6 +51,15 @@ const createSiteIcon = (status: Site['status'], angle: number) =>
     iconAnchor: [10, 10],
   });
 
+// Création de l'icône pour les plaintes
+const createComplaintIcon = (status: string) =>
+  L.divIcon({
+    className: 'complaint-marker',
+    html: `<div class="complaint-circle ${status}">1</div>`,
+    iconSize: [20, 20],
+    iconAnchor: [10, 10],
+  });
+
 export const SiteMarkers: FC<SiteMarkersProps> = ({ sites, onSiteClick }) => {
   // Styles pour les triangles (à ajouter dans votre CSS)
   useEffect(() => {
@@ -90,6 +99,36 @@ export const SiteMarkers: FC<SiteMarkersProps> = ({ sites, onSiteClick }) => {
 
       .site-triangle.maintenance { 
         border-bottom-color: #9e9e9e;
+      }
+
+      .complaint-circle {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #666;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+        transition: transform 0.3s ease;
+      }
+
+      .complaint-circle:hover {
+        transform: scale(1.2);
+      }
+
+      .complaint-circle.pending {
+        background-color: #f44336;
+      }
+
+      .complaint-circle.processing {
+        background-color: #ff9800;
+      }
+
+      .complaint-circle.resolved {
+        background-color: #4caf50;
       }
     `;
     document.head.appendChild(style);

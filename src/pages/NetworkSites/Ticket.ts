@@ -51,4 +51,11 @@ interface Ticket {
   RootCause: string;
 }
 
-export type { Ticket };
+interface Complaint {
+  id: string;
+  position: [number, number];
+  ticketId: string;
+  status: 'pending' | 'processing' | 'resolved';
+}
+
+export type { Ticket, Complaint };

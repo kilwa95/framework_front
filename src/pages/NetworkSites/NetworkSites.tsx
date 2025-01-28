@@ -25,6 +25,7 @@ import dayjs from 'dayjs';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import CloseIcon from '@mui/icons-material/Close';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import { ComplaintDetails } from '../../components/UI/CMap/ComplaintDetails/ComplaintDetails';
 
 interface SiteFilters {
   status: string[];
@@ -184,8 +185,11 @@ const SiteDetailsPanel: FC<{
 };
 
 const NetworkSites: FC = () => {
-  const { sites, loading, error } = useSites();
+  const { sites, complaints, loading, error } = useSites();
   const [selectedSite, setSelectedSite] = useState<Site | null>(null);
+  const [selectedComplaint, setSelectedComplaint] = useState<Complaint | null>(
+    null
+  );
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   // Initialiser les filtres depuis le localStorage
@@ -428,15 +432,25 @@ const NetworkSites: FC = () => {
         center={[46.603354, 1.888334]}
         zoom={6}
         sites={filteredSites}
+        complaints={complaints}
         onSiteClick={(site) => {
-          console.log('Site sélectionné:', site);
           setSelectedSite(site);
+          setSelectedComplaint(null);
+        }}
+        onComplaintClick={(complaint) => {
+          setSelectedComplaint(complaint);
+          setSelectedSite(null);
         }}
       />
 
       <SiteDetailsPanel
         site={selectedSite}
         onClose={() => setSelectedSite(null)}
+      />
+
+      <ComplaintDetails
+        complaint={selectedComplaint}
+        onClose={() => setSelectedComplaint(null)}
       />
     </Box>
   );

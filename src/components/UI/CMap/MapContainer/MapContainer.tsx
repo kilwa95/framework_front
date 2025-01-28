@@ -14,6 +14,8 @@ import { MapLegend } from '../MapLegend/MapLegend';
 import { SiteMarkers } from '../SiteMarkers/SiteMarkers';
 import { Clusters } from '../Clusters/Clusters';
 import type { Site } from '../SiteMarkers/SiteMarkers';
+import { ComplaintMarkers } from '../ComplaintMarkers/ComplaintMarkers';
+import { Complaint } from 'src/pages/NetworkSites/Ticket';
 
 // Types
 interface Incident {
@@ -30,13 +32,12 @@ interface MapContainerProps {
   zoom?: number;
   className?: string;
   sites?: Site[];
+  complaints?: Complaint[];
   incidents?: Incident[];
-  // eslint-disable-next-line no-unused-vars
   onSiteClick?: (site: Site) => void;
-  // eslint-disable-next-line no-unused-vars
-  onIncidentClick?: (incident: Incident) => void;
-  // eslint-disable-next-line no-unused-vars
+  onComplaintClick?: (complaint: Complaint) => void;
   onClusterClick?: (incidents: Incident[]) => void;
+  onIncidentClick?: (incident: Incident) => void;
 }
 
 // Constantes
@@ -53,10 +54,12 @@ export const MapContainer: FC<MapContainerProps> = ({
   zoom = DEFAULT_ZOOM,
   className = '',
   sites = [],
+  complaints = [],
   incidents = [],
   onSiteClick,
-  onIncidentClick,
+  onComplaintClick,
   onClusterClick,
+  onIncidentClick,
 }) => {
   // États
   const theme = useTheme();
@@ -114,14 +117,22 @@ export const MapContainer: FC<MapContainerProps> = ({
         <ZoomControl position="topright" />
 
         {/* Clusters d'incidents */}
-        <Clusters
-          incidents={incidents}
-          onClusterClick={onClusterClick}
-          onIncidentClick={onIncidentClick}
-        />
+        {incidents.length > 0 && (
+          <Clusters
+            incidents={incidents}
+            onClusterClick={onClusterClick}
+            onIncidentClick={onIncidentClick}
+          />
+        )}
 
         {/* Marqueurs de sites */}
         <SiteMarkers sites={sites} onSiteClick={onSiteClick} />
+
+        {/* Marqueurs de plaintes */}
+        <ComplaintMarkers
+          complaints={complaints}
+          onComplaintClick={onComplaintClick}
+        />
       </LeafletMapContainer>
     </Paper>
   );

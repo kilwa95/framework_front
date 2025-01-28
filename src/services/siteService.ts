@@ -1,13 +1,16 @@
 import { Site } from '../components/UI/CMap/SiteMarkers/SiteMarkers';
 import { Ticket } from '../pages/NetworkSites/Ticket';
+import { Complaint } from '../pages/NetworkSites/Ticket';
 
-export const transformTicketToSite = async (ticket: Ticket): Promise<Site> => {
+export const transformTicketToSite = async (
+  ticket: Ticket,
+): Promise<{ site: Site; complaint: Complaint }> => {
   // Centre approximatif de la France
 
   const position = await geocodeSite(ticket);
 
-  return {
-    id: ticket.TicketID,
+  const site = {
+    id: ticket.AffectedSiteCodes,
     position: position,
     name: `Site ${ticket.AffectedSiteCodes}`,
     status: determineStatus(ticket),
@@ -30,6 +33,15 @@ export const transformTicketToSite = async (ticket: Ticket): Promise<Site> => {
       status: ticket.Status,
     },
   };
+
+  const complaint = {
+    id: `complaint-${ticket.TicketID}`,
+    position: position,
+    ticketId: ticket.TicketID,
+    status: determineComplaintStatus(ticket.Status),
+  };
+
+  return { site, complaint };
 };
 
 const determineStatus = (ticket: Ticket): Site['status'] => {
@@ -44,8 +56,22 @@ const determineStatus = (ticket: Ticket): Site['status'] => {
   }
 };
 
+const determineComplaintStatus = (
+  status: string,
+): 'pending' | 'processing' | 'resolved' => {
+  switch (status.toLowerCase()) {
+    case 'pending':
+      return 'pending';
+    case 'to analyze':
+    case 'to process':
+      return 'processing';
+    default:
+      return 'resolved';
+  }
+};
+
 export const geocodeSite = async (
-  ticket: Ticket
+  ticket: Ticket,
 ): Promise<[number, number]> => {
   const defaultPosition: [number, number] = [46.603354, 1.888334]; // Centre de la France
 
@@ -54,7 +80,7 @@ export const geocodeSite = async (
 
     // Utilisation de l'API Photon qui est basée sur OpenStreetMap
     const response = await fetch(
-      `https://photon.komoot.io/api/?q=${encodeURIComponent(address)}&limit=1`
+      `https://photon.komoot.io/api/?q=${encodeURIComponent(address)}&limit=1`,
     );
 
     if (!response.ok) {
