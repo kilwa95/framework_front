@@ -6,10 +6,7 @@ import {
   Drawer,
   Typography,
   Button,
-  Divider,
-  Chip,
   IconButton,
-  Link,
 } from '@mui/material';
 import { MapContainer } from '../../components/UI/CMap/MapContainer/MapContainer';
 import { useSites } from '../../hooks/useSites';
@@ -23,17 +20,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import CloseIcon from '@mui/icons-material/Close';
-import AssignmentIcon from '@mui/icons-material/Assignment';
 import { ComplaintDetails } from '../../components/UI/CMap/ComplaintDetails/ComplaintDetails';
-
-interface SiteFilters {
-  status: string[];
-  problemFamily: string[];
-  incidentStartDate: [Date | null, Date | null];
-  postalCode: string;
-  searchText: string;
-}
+import { SiteFilters } from './types';
+import { SiteDetailsPanel } from '../../components/UI/SiteDetailsPanel/SiteDetailsPanel';
 
 // Styles pour le panneau de filtres
 const filterPanelStyles = {
@@ -77,118 +66,11 @@ const filterPanelStyles = {
 // Constante pour la clé de stockage
 const FILTER_STORAGE_KEY = 'networkSites.filters';
 
-const SiteDetailsPanel: FC<{
-  site: Site | null;
-  onClose: () => void;
-}> = ({ site, onClose }) => {
-  if (!site) return null;
-
-  return (
-    <Drawer
-      anchor="right"
-      open={Boolean(site)}
-      onClose={onClose}
-      sx={{
-        '& .MuiDrawer-paper': {
-          width: 400,
-          padding: 3,
-          backgroundColor: 'background.paper',
-        },
-      }}
-    >
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        {/* Header */}
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Typography variant="h6">Détails du site</Typography>
-          <IconButton onClick={onClose}>
-            <CloseIcon />
-          </IconButton>
-        </Box>
-
-        <Divider />
-
-        {/* Informations principales */}
-        <Box>
-          <Typography variant="subtitle1" fontWeight="bold">
-            {site.name}
-          </Typography>
-          <Chip
-            label={site.status}
-            color={
-              site.status === 'active'
-                ? 'success'
-                : site.status === 'warning'
-                  ? 'warning'
-                  : 'error'
-            }
-            size="small"
-            sx={{ mt: 1 }}
-          />
-        </Box>
-
-        {/* Localisation */}
-        <Box>
-          <Typography variant="subtitle2" color="text.secondary">
-            Localisation
-          </Typography>
-          <Typography>
-            {site.address?.street}
-            <br />
-            {site.address?.postalCode} {site.address?.city}
-          </Typography>
-        </Box>
-
-        {/* Couverture */}
-        <Box>
-          <Typography variant="subtitle2" color="text.secondary">
-            Couverture
-          </Typography>
-          <Typography>Rayon: {site.coverage.radius} km</Typography>
-          <Typography>Angle: {site.coverage.angle}°</Typography>
-        </Box>
-
-        {/* Ticket associé */}
-        <Box>
-          <Typography variant="subtitle2" color="text.secondary">
-            Ticket associé
-          </Typography>
-          <Link
-            href={`/tickets/${site.ticket?.id}`}
-            sx={{ textDecoration: 'none' }}
-          >
-            <Button
-              variant="outlined"
-              size="small"
-              startIcon={<AssignmentIcon />}
-              sx={{ mt: 1 }}
-            >
-              Voir le ticket #{site.ticket?.id}
-            </Button>
-          </Link>
-        </Box>
-
-        {/* Dernière mise à jour */}
-        <Box sx={{ mt: 'auto' }}>
-          <Typography variant="caption" color="text.secondary">
-            Dernière mise à jour: {new Date(site.lastUpdate).toLocaleString()}
-          </Typography>
-        </Box>
-      </Box>
-    </Drawer>
-  );
-};
-
 const NetworkSites: FC = () => {
   const { sites, complaints, loading, error } = useSites();
   const [selectedSite, setSelectedSite] = useState<Site | null>(null);
   const [selectedComplaint, setSelectedComplaint] = useState<Complaint | null>(
-    null
+    null,
   );
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
@@ -203,7 +85,7 @@ const NetworkSites: FC = () => {
       return {
         ...parsedFilters,
         incidentStartDate: parsedFilters.incidentStartDate.map(
-          (date: string | null) => (date ? dayjs(date) : null)
+          (date: string | null) => (date ? dayjs(date) : null),
         ),
       };
     }
@@ -222,7 +104,7 @@ const NetworkSites: FC = () => {
     const filtersToSave = {
       ...filters,
       incidentStartDate: filters.incidentStartDate.map((date) =>
-        date ? date.toISOString() : null
+        date ? date.toISOString() : null,
       ),
     };
 
@@ -275,7 +157,6 @@ const NetworkSites: FC = () => {
         }
       }
 
-      // Autres filtres...
       return true;
     });
   }, [sites, filters]);
