@@ -57,6 +57,17 @@ interface Complaint {
   ticketId: string;
   status: 'pending' | 'processing' | 'resolved';
   linkedTicket: string;
+  creationDate: string;
+  problemFamily: string;
+  problemSubFamily: string;
+  customer: string | number;
+  incidentStartDate: string;
+  address: {
+    street: string;
+    postalCode: number;
+    city: string;
+  };
+  responsible: string;
 }
 
 export type { Ticket, Complaint };

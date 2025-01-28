@@ -40,6 +40,17 @@ export const transformTicketToSite = async (
     ticketId: ticket.TicketID,
     status: determineComplaintStatus(ticket.Status),
     linkedTicket: ticket.LinkedTicket,
+    creationDate: ticket.CreationDate,
+    problemFamily: ticket.ProblemFamily,
+    problemSubFamily: ticket.ProblemSubFamily,
+    customer: ticket.Customer,
+    incidentStartDate: ticket.IncidentStartDate,
+    address: {
+      street: ticket.StreetAddress,
+      postalCode: ticket.PostalCode,
+      city: ticket.City,
+    },
+    responsible: ticket.Responsible,
   };
 
   return { site, complaint };

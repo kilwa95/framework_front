@@ -93,14 +93,52 @@ export const ComplaintDetails: FC<ComplaintDetailsProps> = ({
           />
         </Box>
 
-        {/* Nombre de plaintes */}
+        {/* Date de création et début d'incident */}
         <Box>
           <Typography variant="subtitle2" color="text.secondary">
-            Nombre de plaintes à cette position
+            Dates importantes
           </Typography>
-          <Typography variant="h4" color="primary">
-            {complaint.count}
+          <Typography>
+            Création: {new Date(complaint.creationDate).toLocaleDateString()}
+            <br />
+            Début incident: {new Date(complaint.incidentStartDate).toLocaleDateString()}
           </Typography>
+        </Box>
+
+        {/* Catégorie du problème */}
+        <Box>
+          <Typography variant="subtitle2" color="text.secondary">
+            Catégorie du problème
+          </Typography>
+          <Typography>
+            {complaint.problemFamily}
+            {complaint.problemSubFamily && (
+              <>
+                <br />
+                {complaint.problemSubFamily}
+              </>
+            )}
+          </Typography>
+        </Box>
+
+        {/* Adresse */}
+        <Box>
+          <Typography variant="subtitle2" color="text.secondary">
+            Adresse
+          </Typography>
+          <Typography>
+            {complaint.address.street}
+            <br />
+            {complaint.address.postalCode} {complaint.address.city}
+          </Typography>
+        </Box>
+
+        {/* Responsable */}
+        <Box>
+          <Typography variant="subtitle2" color="text.secondary">
+            Responsable
+          </Typography>
+          <Typography>{complaint.responsible}</Typography>
         </Box>
 
         {/* Localisation */}
