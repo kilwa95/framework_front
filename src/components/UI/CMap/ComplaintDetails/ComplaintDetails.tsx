@@ -101,7 +101,8 @@ export const ComplaintDetails: FC<ComplaintDetailsProps> = ({
           <Typography>
             Création: {new Date(complaint.creationDate).toLocaleDateString()}
             <br />
-            Début incident: {new Date(complaint.incidentStartDate).toLocaleDateString()}
+            Début incident:{' '}
+            {new Date(complaint.incidentStartDate).toLocaleDateString()}
           </Typography>
         </Box>
 
