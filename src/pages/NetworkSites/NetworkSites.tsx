@@ -9,6 +9,7 @@ import { ComplaintDetails } from '../../components/UI/CMap/ComplaintDetails/Comp
 import { SiteFilters } from './types';
 import { SiteDetailsPanel } from '../../components/UI/SiteDetailsPanel/SiteDetailsPanel';
 import { FilterPanel } from '../../components/FilterPanel/FilterPanel';
+import { Complaint } from './Ticket';
 
 // Constante pour la clé de stockage
 const FILTER_STORAGE_KEY = 'networkSites.filters';
@@ -27,11 +28,9 @@ const filterButtonStyle = {
 const NetworkSites: FC = () => {
   const { sites, complaints, loading, error } = useSites();
 
-  console.log('complaints', complaints[0]);
-  console.log('sites', sites[0]);
   const [selectedSite, setSelectedSite] = useState<Site | null>(null);
   const [selectedComplaint, setSelectedComplaint] = useState<Complaint | null>(
-    null
+    null,
   );
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
@@ -45,7 +44,7 @@ const NetworkSites: FC = () => {
       return {
         ...parsedFilters,
         incidentStartDate: parsedFilters.incidentStartDate.map(
-          (date: string | null) => (date ? dayjs(date) : null)
+          (date: string | null) => (date ? dayjs(date) : null),
         ),
       };
     }
@@ -64,7 +63,7 @@ const NetworkSites: FC = () => {
     const filtersToSave = {
       ...filters,
       incidentStartDate: filters.incidentStartDate.map((date) =>
-        date ? date.toISOString() : null
+        date ? date.toISOString() : null,
       ),
     };
 

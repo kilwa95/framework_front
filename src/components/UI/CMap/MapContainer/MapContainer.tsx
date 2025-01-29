@@ -122,14 +122,14 @@ export const MapContainer: FC<MapContainerProps> = ({
               const sitesInCluster = items
                 .filter(
                   (item): item is ClusterItem & { data: Site } =>
-                    item.type === 'site'
+                    item.type === 'site',
                 )
                 .map((item) => item.data);
 
               const complaintsInCluster = items
                 .filter(
                   (item): item is ClusterItem & { data: Complaint } =>
-                    item.type === 'complaint'
+                    item.type === 'complaint',
                 )
                 .map((item) => item.data);
 
