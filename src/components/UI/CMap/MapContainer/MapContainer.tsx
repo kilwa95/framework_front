@@ -117,24 +117,32 @@ export const MapContainer: FC<MapContainerProps> = ({
             complaints={complaints}
             onSiteClick={onSiteClick}
             onComplaintClick={onComplaintClick}
-            onClusterClick={(items) => {
-              // Vous pouvez gérer ici la logique pour traiter les différents types d'éléments
-              const sitesInCluster = items
-                .filter(
-                  (item): item is ClusterItem & { data: Site } =>
-                    item.type === 'site',
-                )
-                .map((item) => item.data);
+            // onClusterClick={(items) => {
+            //   const sitesInCluster = items
+            //     .filter(
+            //       (item): item is ClusterItem & { data: Site } =>
+            //         item.type === 'site'
+            //     )
+            //     .map((item) => item.data);
 
-              const complaintsInCluster = items
-                .filter(
-                  (item): item is ClusterItem & { data: Complaint } =>
-                    item.type === 'complaint',
-                )
-                .map((item) => item.data);
+            //   const complaintsInCluster = items
+            //     .filter(
+            //       (item): item is ClusterItem & { data: Complaint } =>
+            //         item.type === 'complaint'
+            //     )
+            //     .map((item) => item.data);
 
-              // Gérer les éléments selon vos besoins
-            }}
+            //   // Appeler le handler approprié selon le contenu du cluster
+            //   if (sitesInCluster.length > 0 && onSiteClick) {
+            //     sitesInCluster.forEach(onSiteClick);
+            //   }
+            //   if (complaintsInCluster.length > 0 && onComplaintClick) {
+            //     complaintsInCluster.forEach(onComplaintClick);
+            //   }
+            //   if (onClusterClick) {
+            //     onClusterClick([...sitesInCluster, ...complaintsInCluster]);
+            //   }
+            // }}
           />
         )}
 
