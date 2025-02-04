@@ -10,6 +10,7 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import PortfolioRoutes from './pages/PortfolioPage/PortfolioRoutes';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
 import NetworkSites from './pages/NetworkSites/NetworkSites';
+import ChartPage from './pages/ChartPage/ChartPage';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
               <HomeLayout>
                 <Suspense fallback={<CCircularProgress />}>
                   <Routes>
+                    <Route path="/chartpage" element={<ChartPage />} />
                     <Route
                       path={ROUTES.home.path}
                       element={
