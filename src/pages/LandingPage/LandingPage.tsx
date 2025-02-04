@@ -1,12 +1,14 @@
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Button, Typography, useTheme } from '@mui/material';
 import fusee from 'src/assets/images/starship.png';
 import sx from 'mui-sx';
 
 import { landingPageStyles } from './styles';
 import { useAppSelector } from 'src/hooks';
+import { useNavigate } from 'react-router';
 
 const LandingPage = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const user = useAppSelector((state) => state.auth.userInfos.data);
 
   return (
@@ -34,6 +36,9 @@ const LandingPage = () => {
               'Cette application intègre plusieurs modules (Redux, MUI) pour créer une nouvelle application.'
             }
           </Typography>
+          <Button onClick={() => navigate('/chartpage')} variant="contained">
+            Go to chartPage
+          </Button>
         </Box>
         <Box sx={landingPageStyles(theme).infosImage}>
           <img src={fusee} alt="fusee" />
