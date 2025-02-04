@@ -97,6 +97,13 @@ const HomeNavbar: React.FC<Props> = ({ children }) => {
               >
                 Portfolio
               </Button>
+              <Button
+                variant="contained"
+                onClick={() => navigate('/network')}
+                sx={{ ml: 1 }}
+              >
+                Sites Réseau
+              </Button>
               {isTablet && (
                 <>
                   <IconButton
@@ -123,7 +130,7 @@ const HomeNavbar: React.FC<Props> = ({ children }) => {
                     menuItems={roleHaveAccessMenu}
                     anchorEl={anchorEls.menu1}
                     onOpen={(
-                      event: React.MouseEvent<HTMLElement, MouseEvent>,
+                      event: React.MouseEvent<HTMLElement, MouseEvent>
                     ) => handleOpenMenu(event, 'menu1')}
                     onClose={() => handleCloseMenu('menu1')}
                   />
@@ -133,7 +140,7 @@ const HomeNavbar: React.FC<Props> = ({ children }) => {
                     menuItems={roleHaveAccessMenu}
                     anchorEl={anchorEls.menu1}
                     onOpen={(
-                      event: React.MouseEvent<HTMLElement, MouseEvent>,
+                      event: React.MouseEvent<HTMLElement, MouseEvent>
                     ) => handleOpenMenu(event, 'menu1')}
                     onClose={() => handleCloseMenu('menu1')}
                   />
@@ -143,7 +150,7 @@ const HomeNavbar: React.FC<Props> = ({ children }) => {
                     menuItems={roleHaveAccessMenu}
                     anchorEl={anchorEls.menu1}
                     onOpen={(
-                      event: React.MouseEvent<HTMLElement, MouseEvent>,
+                      event: React.MouseEvent<HTMLElement, MouseEvent>
                     ) => handleOpenMenu(event, 'menu1')}
                     onClose={() => handleCloseMenu('menu1')}
                   />

@@ -1,15 +1,27 @@
 # Use an official Node runtime as a parent image
 FROM node:18-alpine
 
-# set working directory
+# Set working directory
 WORKDIR /app
 
-# add app
+# Copy package files first
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy source code
 COPY . .
 
-RUN npm install
-RUN npm install react-scripts@5.0.1 -g
+# Install global packages
+RUN npm install -g concurrently json-server
 
-CMD ["npm", "start"]
+# Add development specific environment variables
+ENV CHOKIDAR_USEPOLLING=true
+ENV WATCHPACK_POLLING=true
 
-EXPOSE 3000
+# Expose Vite, Storybook, and json-server ports
+EXPOSE 5173 6006 3001
+
+# Start development server with both Vite, Storybook, and json-server
+CMD ["npm", "run", "dev"]

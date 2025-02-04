@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // src/components/map/MapContainer/index.tsx
 
 import { FC, useState, useRef } from 'react';
@@ -9,11 +10,12 @@ import {
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { styles } from './styles';
-import { MapControls } from '../MapControls/MapControls';
 import { MapLegend } from '../MapLegend/MapLegend';
 import { SiteMarkers } from '../SiteMarkers/SiteMarkers';
 import { Clusters } from '../Clusters/Clusters';
 import type { Site } from '../SiteMarkers/SiteMarkers';
+import { ComplaintMarkers } from '../ComplaintMarkers/ComplaintMarkers';
+import { Complaint } from 'src/pages/NetworkSites/Ticket';
 
 // Types
 interface Incident {
@@ -30,13 +32,28 @@ interface MapContainerProps {
   zoom?: number;
   className?: string;
   sites?: Site[];
+  complaints?: Complaint[];
   incidents?: Incident[];
-  // eslint-disable-next-line no-unused-vars
   onSiteClick?: (site: Site) => void;
-  // eslint-disable-next-line no-unused-vars
-  onIncidentClick?: (incident: Incident) => void;
-  // eslint-disable-next-line no-unused-vars
+  onComplaintClick?: (complaint: Complaint) => void;
   onClusterClick?: (incidents: Incident[]) => void;
+  onIncidentClick?: (incident: Incident) => void;
+}
+
+interface ClusterItem {
+  id: string;
+  position: [number, number];
+  type: 'site' | 'complaint';
+  status: string;
+  data: Site | Complaint;
+}
+
+interface ClustersProps {
+  sites: Site[];
+  complaints: Complaint[];
+  onSiteClick?: (site: Site) => void;
+  onComplaintClick?: (complaint: Complaint) => void;
+  onClusterClick?: (items: ClusterItem[]) => void;
 }
 
 // Constantes
@@ -53,28 +70,17 @@ export const MapContainer: FC<MapContainerProps> = ({
   zoom = DEFAULT_ZOOM,
   className = '',
   sites = [],
+  complaints = [],
   incidents = [],
   onSiteClick,
-  onIncidentClick,
+  onComplaintClick,
   onClusterClick,
+  onIncidentClick,
 }) => {
   // États
   const theme = useTheme();
   const [mapType, setMapType] = useState<'standard' | 'satellite'>('standard');
   const mapRef = useRef(null);
-
-  // Gestionnaires d'événements pour les contrôles
-  const handleZoomIn = () => {
-    mapRef.current?.zoomIn();
-  };
-
-  const handleZoomOut = () => {
-    mapRef.current?.zoomOut();
-  };
-
-  const handleCenter = () => {
-    mapRef.current?.setView(center, zoom);
-  };
 
   return (
     <Paper
@@ -82,15 +88,6 @@ export const MapContainer: FC<MapContainerProps> = ({
       className={`relative ${className}`}
       sx={styles(theme).mapContainer}
     >
-      {/* Contrôles de la carte */}
-      <MapControls
-        mapType={mapType}
-        onMapTypeChange={setMapType}
-        onZoomIn={handleZoomIn}
-        onZoomOut={handleZoomOut}
-        onCenter={handleCenter}
-      />
-
       {/* Légende de la carte */}
       <MapLegend />
 
@@ -114,23 +111,50 @@ export const MapContainer: FC<MapContainerProps> = ({
         <ZoomControl position="topright" />
 
         {/* Clusters d'incidents */}
-        <Clusters
-          incidents={incidents}
-          onClusterClick={onClusterClick}
-          onIncidentClick={onIncidentClick}
-        />
+        {(sites.length > 0 || complaints.length > 0) && (
+          <Clusters
+            sites={sites}
+            complaints={complaints}
+            onSiteClick={onSiteClick}
+            onComplaintClick={onComplaintClick}
+            // onClusterClick={(items) => {
+            //   const sitesInCluster = items
+            //     .filter(
+            //       (item): item is ClusterItem & { data: Site } =>
+            //         item.type === 'site'
+            //     )
+            //     .map((item) => item.data);
+
+            //   const complaintsInCluster = items
+            //     .filter(
+            //       (item): item is ClusterItem & { data: Complaint } =>
+            //         item.type === 'complaint'
+            //     )
+            //     .map((item) => item.data);
+
+            //   // Appeler le handler approprié selon le contenu du cluster
+            //   if (sitesInCluster.length > 0 && onSiteClick) {
+            //     sitesInCluster.forEach(onSiteClick);
+            //   }
+            //   if (complaintsInCluster.length > 0 && onComplaintClick) {
+            //     complaintsInCluster.forEach(onComplaintClick);
+            //   }
+            //   if (onClusterClick) {
+            //     onClusterClick([...sitesInCluster, ...complaintsInCluster]);
+            //   }
+            // }}
+          />
+        )}
 
         {/* Marqueurs de sites */}
         <SiteMarkers sites={sites} onSiteClick={onSiteClick} />
+
+        {/* Marqueurs de plaintes */}
+        <ComplaintMarkers
+          complaints={complaints}
+          onComplaintClick={onComplaintClick}
+        />
       </LeafletMapContainer>
     </Paper>
   );
 };
-
-// Styles pour corriger les icônes Leaflet
-// À ajouter dans votre fichier CSS global
-/*
-.leaflet-default-icon-path {
-  background-image: url(https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png);
-}
-*/

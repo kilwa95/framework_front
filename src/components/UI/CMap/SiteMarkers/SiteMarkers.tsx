@@ -16,6 +16,19 @@ export interface Site {
     radius: number;
   };
   lastUpdate: string;
+  address?: {
+    street: string;
+    postalCode: number;
+    city: string;
+  };
+  ticket?: {
+    id: string;
+    problemFamily: string;
+    problemSubFamily: string;
+    responsible: string;
+    creationDate: string;
+    status: string;
+  };
 }
 
 interface SiteMarkersProps {
@@ -38,23 +51,85 @@ const createSiteIcon = (status: Site['status'], angle: number) =>
     iconAnchor: [10, 10],
   });
 
+// Création de l'icône pour les plaintes
+const createComplaintIcon = (status: string) =>
+  L.divIcon({
+    className: 'complaint-marker',
+    html: `<div class="complaint-circle ${status}">1</div>`,
+    iconSize: [20, 20],
+    iconAnchor: [10, 10],
+  });
+
 export const SiteMarkers: FC<SiteMarkersProps> = ({ sites, onSiteClick }) => {
   // Styles pour les triangles (à ajouter dans votre CSS)
   useEffect(() => {
     const style = document.createElement('style');
 
     style.textContent = `
+      .site-marker {
+        width: 20px;
+        height: 20px;
+        position: relative;
+      }
+
       .site-triangle {
         width: 0;
         height: 0;
         border-left: 10px solid transparent;
         border-right: 10px solid transparent;
         border-bottom: 17.3px solid #666;
+        transition: transform 0.3s ease;
       }
-      .site-triangle.active { border-bottom-color: #4caf50; }
-      .site-triangle.warning { border-bottom-color: #ff9800; }
-      .site-triangle.error { border-bottom-color: #f44336; }
-      .site-triangle.maintenance { border-bottom-color: #9e9e9e; }
+
+      .site-triangle:hover {
+        transform: scale(1.2) !important;
+      }
+
+      .site-triangle.active { 
+        border-bottom-color: #4caf50;
+      }
+
+      .site-triangle.warning { 
+        border-bottom-color: #ff9800;
+      }
+
+      .site-triangle.error { 
+        border-bottom-color: #f44336;
+      }
+
+      .site-triangle.maintenance { 
+        border-bottom-color: #9e9e9e;
+      }
+
+      .complaint-circle {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #666;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+        transition: transform 0.3s ease;
+      }
+
+      .complaint-circle:hover {
+        transform: scale(1.2);
+      }
+
+      .complaint-circle.pending {
+        background-color: #f44336;
+      }
+
+      .complaint-circle.processing {
+        background-color: #ff9800;
+      }
+
+      .complaint-circle.resolved {
+        background-color: #4caf50;
+      }
     `;
     document.head.appendChild(style);
 

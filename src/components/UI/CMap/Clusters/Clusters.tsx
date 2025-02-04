@@ -5,51 +5,61 @@ import { useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet.markercluster';
 import './Clusters.css';
+import { Site } from '../SiteMarkers/SiteMarkers';
+import { Complaint } from 'src/pages/NetworkSites/Ticket';
 
 // Types
-interface Incident {
+interface ClusterItem {
   id: string;
   position: [number, number];
-  type: 'call' | 'data' | 'sms' | 'other';
-  status: 'new' | 'processing' | 'resolved';
-  timestamp: string;
-  description: string;
+  type: 'site' | 'complaint';
+  status: string;
+  data: Site | Complaint;
 }
 
 interface ClustersProps {
-  incidents: Incident[];
-  onClusterClick?: (incidents: Incident[]) => void;
-  onIncidentClick?: (incident: Incident) => void;
+  sites: Site[];
+  complaints: Complaint[];
+  onSiteClick?: (site: Site) => void;
+  onComplaintClick?: (complaint: Complaint) => void;
+  onClusterClick?: (items: ClusterItem[]) => void;
 }
 
 // Styles pour les clusters
-const getClusterColor = (count: number): string => {
-  if (count < 10) return '#2196f3'; // Bleu
-  if (count < 50) return '#ff9800'; // Orange
+const getClusterColor = (items: ClusterItem[]): string => {
+  const hasError = items.some(
+    (item) => item.status === 'error' || item.status === 'pending'
+  );
+  const hasWarning = items.some(
+    (item) => item.status === 'warning' || item.status === 'processing'
+  );
 
-  return '#f44336'; // Rouge
+  if (hasError) return '#f44336';
+  if (hasWarning) return '#ff9800';
+  return '#4caf50';
 };
 
 export const Clusters: FC<ClustersProps> = ({
-  incidents,
+  sites,
+  complaints,
+  onSiteClick,
+  onComplaintClick,
   onClusterClick,
-  onIncidentClick,
 }) => {
   const map = useMap();
 
   useEffect(() => {
-    // Création du groupe de clusters
     const markerClusterGroup = L.markerClusterGroup({
       iconCreateFunction: (cluster) => {
+        const clusterItems = cluster
+          .getAllChildMarkers()
+          .map((marker) => marker.options.itemData);
+        const color = getClusterColor(clusterItems);
         const count = cluster.getChildCount();
-        const color = getClusterColor(count);
 
         return L.divIcon({
           html: `
-            <div 
-              class="cluster-marker" 
-              style="background-color: ${color}"
-            >
+            <div class="cluster-marker" style="background-color: ${color}">
               ${count}
             </div>
           `,
@@ -63,54 +73,67 @@ export const Clusters: FC<ClustersProps> = ({
       zoomToBoundsOnClick: true,
     });
 
-    // Ajout des marqueurs d'incidents
-    incidents.forEach((incident) => {
-      const marker = L.marker(incident.position, {
+    // Ajouter les marqueurs de sites
+    sites.forEach((site) => {
+      const itemData: ClusterItem = {
+        id: site.id,
+        position: site.position,
+        type: 'site',
+        status: site.status,
+        data: site,
+      };
+
+      const marker = L.marker(site.position, {
         icon: L.divIcon({
-          html: `
-            <div class="incident-marker ${incident.status}">
-              <div class="incident-dot"></div>
-            </div>
-          `,
-          className: 'custom-incident-icon',
+          html: `<div class="site-marker ${site.status}"></div>`,
+          className: 'custom-site-icon',
+          iconSize: L.point(25, 25),
+        }),
+        itemData,
+      });
+
+      marker.on('click', () => onSiteClick?.(site));
+      markerClusterGroup.addLayer(marker);
+    });
+
+    // Ajouter les marqueurs de plaintes
+    complaints.forEach((complaint) => {
+      const itemData: ClusterItem = {
+        id: complaint.id,
+        position: complaint.position,
+        type: 'complaint',
+        status: complaint.status,
+        data: complaint,
+      };
+
+      const marker = L.marker(complaint.position, {
+        icon: L.divIcon({
+          html: `<div class="complaint-marker ${complaint.status}"></div>`,
+          className: 'custom-complaint-icon',
           iconSize: L.point(20, 20),
         }),
+        itemData,
       });
 
-      // Gestion des événements de clic
-      marker.on('click', () => {
-        onIncidentClick?.(incident);
-      });
-
+      marker.on('click', () => onComplaintClick?.(complaint));
       markerClusterGroup.addLayer(marker);
     });
 
     // Gestion du clic sur un cluster
     markerClusterGroup.on('clusterclick', (event) => {
-      const clusterMarkers = event.layer.getAllChildMarkers();
-      const clusterIncidents = clusterMarkers
-        .map((marker) => {
-          const position = marker.getLatLng();
+      const clusterItems = event.layer
+        .getAllChildMarkers()
+        .map((marker) => marker.options.itemData);
 
-          return incidents.find(
-            (incident) =>
-              incident.position[0] === position.lat &&
-              incident.position[1] === position.lng,
-          );
-        })
-        .filter((incident): incident is Incident => incident !== undefined);
-
-      onClusterClick?.(clusterIncidents);
+      onClusterClick?.(clusterItems);
     });
 
-    // Ajout du groupe de clusters à la carte
     map.addLayer(markerClusterGroup);
 
-    // Nettoyage lors du démontage
     return () => {
       map.removeLayer(markerClusterGroup);
     };
-  }, [incidents, map, onClusterClick, onIncidentClick]);
+  }, [sites, complaints, map, onSiteClick, onComplaintClick, onClusterClick]);
 
   return null;
 };

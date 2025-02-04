@@ -9,6 +9,7 @@ import LandingPage from './pages/LandingPage/LandingPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import PortfolioRoutes from './pages/PortfolioPage/PortfolioRoutes';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
+import NetworkSites from './pages/NetworkSites/NetworkSites';
 import ChartPage from './pages/ChartPage/ChartPage';
 
 function App() {
@@ -27,7 +28,7 @@ function App() {
         <Route
           path="/*"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute children={undefined}>
               <HomeLayout>
                 <Suspense fallback={<CCircularProgress />}>
                   <Routes>
@@ -40,6 +41,7 @@ function App() {
                         </ProtectedRoute>
                       }
                     />
+                    <Route path="/network" element={<NetworkSites />} />
                     <Route path={ROUTES.error.path} element={<ErrorPage />} />
                   </Routes>
                 </Suspense>
