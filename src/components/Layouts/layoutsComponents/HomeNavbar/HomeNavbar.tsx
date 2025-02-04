@@ -92,10 +92,10 @@ const HomeNavbar: React.FC<Props> = ({ children }) => {
                 <HomeIcon />
               </IconButton>
               <Button
+                onClick={() => navigate('/chartpage')}
                 variant="contained"
-                onClick={() => navigate('/portfolio')}
               >
-                Portfolio
+                chartPage
               </Button>
               <Button
                 variant="contained"
